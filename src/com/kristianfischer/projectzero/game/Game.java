@@ -1,5 +1,6 @@
 package com.kristianfischer.projectzero.game;
 
+import com.kristianfischer.projectzero.gameinput.KeyInput;
 import com.kristianfischer.projectzero.gameobject.Player;
 
 import java.awt.*;
@@ -18,8 +19,9 @@ public class Game extends Canvas implements Runnable{
     private GameHandler mGameHandler;
 
     public Game() {
-        new GameWindow(WIDTH, HEIGHT, "Space Invaders Clone!", this);
         mGameHandler = new GameHandler();
+        this.addKeyListener(new KeyInput(mGameHandler));
+        new GameWindow(WIDTH, HEIGHT, "Space Invaders Clone!", this);
         mGameHandler.addGameObject(new Player(100, 100, GameId.Player));
     }
 
@@ -63,7 +65,7 @@ public class Game extends Canvas implements Runnable{
 
             if( System.currentTimeMillis() - timer > 1000 ) {
                 timer += 1000;
-                System.out.println("FPS: " + frames);
+                //System.out.println("FPS: " + frames);
                 frames = 0;
             }
         }

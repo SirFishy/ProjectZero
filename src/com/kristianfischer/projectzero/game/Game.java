@@ -1,9 +1,16 @@
 package com.kristianfischer.projectzero.game;
 
+import com.kristianfischer.projectzero.command.MoveDownCommand;
+import com.kristianfischer.projectzero.command.MoveLeftCommand;
+import com.kristianfischer.projectzero.command.MoveRightCommand;
+import com.kristianfischer.projectzero.command.MoveUpCommand;
 import com.kristianfischer.projectzero.gameinput.KeyInput;
+import com.kristianfischer.projectzero.gameinput.KeyMapper;
 import com.kristianfischer.projectzero.gameobject.Player;
+import com.kristianfischer.projectzero.handler.GameHandler;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 
 /**
@@ -17,18 +24,26 @@ public class Game extends Canvas implements Runnable{
     private boolean mRunning = false;
     private Thread mGameThread;
     private GameHandler mGameHandler;
+    private KeyMapper mKeyMapper;
 
     public Game() {
         mGameHandler = new GameHandler();
-        this.addKeyListener(new KeyInput(mGameHandler));
+        mKeyMapper = new KeyMapper();
+        mKeyMapper.setKeyMapping(KeyEvent.VK_W, new MoveUpCommand());
+        mKeyMapper.setKeyMapping(KeyEvent.VK_A, new MoveLeftCommand());
+        mKeyMapper.setKeyMapping(KeyEvent.VK_D, new MoveRightCommand());
+        mKeyMapper.setKeyMapping(KeyEvent.VK_S, new MoveDownCommand());
+        this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
         new GameWindow(WIDTH, HEIGHT, "Space Invaders Clone!", this);
         mGameHandler.addGameObject(new Player(100, 100, GameId.Player));
+
     }
 
     public synchronized void start() {
         mGameThread = new Thread(this);
         mGameThread.start();
         mRunning = true;
+
     }
 
     public synchronized void stop() {
@@ -65,7 +80,7 @@ public class Game extends Canvas implements Runnable{
 
             if( System.currentTimeMillis() - timer > 1000 ) {
                 timer += 1000;
-                //System.out.println("FPS: " + frames);
+                System.out.println("FPS: " + frames);
                 frames = 0;
             }
         }

@@ -10,8 +10,9 @@ import java.awt.*;
 public abstract class GameObject {
 
     protected int xPosition, yPosition;
-    protected GameId gameId;
     protected int xVelocity, yVelocity;
+    protected int speed;
+    protected GameId gameId;
 
     /**
      *
@@ -66,5 +67,14 @@ public abstract class GameObject {
 
     public void setyVelocity(int yVelocity) {
         this.yVelocity = yVelocity;
+    }
+
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 }

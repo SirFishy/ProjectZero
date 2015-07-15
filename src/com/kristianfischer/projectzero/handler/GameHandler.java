@@ -1,4 +1,4 @@
-package com.kristianfischer.projectzero.game;
+package com.kristianfischer.projectzero.handler;
 
 import com.kristianfischer.projectzero.gameobject.GameObject;
 
@@ -10,7 +10,7 @@ import java.util.LinkedList;
  */
 public class GameHandler  {
 
-    LinkedList<GameObject> gameObjects = new LinkedList<>();
+    public LinkedList<GameObject> gameObjects = new LinkedList<>();
 
     public void tick() {
         for( GameObject object : gameObjects ) {

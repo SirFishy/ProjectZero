@@ -1,6 +1,8 @@
 package com.kristianfischer.projectzero.gameobject;
 
 import com.kristianfischer.projectzero.game.GameId;
+import com.kristianfischer.projectzero.gameinput.KeyMapper;
+import com.kristianfischer.projectzero.state.PlayerMovementHandler;
 
 import java.awt.*;
 
@@ -9,9 +11,12 @@ import java.awt.*;
  */
 public class Player extends GameObject {
 
+    private PlayerMovementHandler mPlayerMovementHandler;
+
     public Player(int xPosition, int yPosition, GameId id) {
         super(xPosition, yPosition, id);
-        xVelocity += 1;
+        speed = 5;
+        mPlayerMovementHandler = new PlayerMovementHandler(this);
     }
 
     @Override
@@ -25,4 +30,13 @@ public class Player extends GameObject {
         g.setColor(Color.white);
         g.fillRect(xPosition, yPosition, 32, 32);
     }
+
+    public boolean isMoving() {
+        return ( xVelocity != 0 ) || ( yVelocity != 0 );
+    }
+
+    public PlayerMovementHandler getPlayerMovementHandler() {
+        return mPlayerMovementHandler;
+    }
+
 }

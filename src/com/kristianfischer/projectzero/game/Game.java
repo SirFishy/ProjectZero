@@ -1,12 +1,10 @@
 package com.kristianfischer.projectzero.game;
 
-import com.kristianfischer.projectzero.command.MoveDownCommand;
-import com.kristianfischer.projectzero.command.MoveLeftCommand;
-import com.kristianfischer.projectzero.command.MoveRightCommand;
-import com.kristianfischer.projectzero.command.MoveUpCommand;
+import com.kristianfischer.projectzero.command.*;
 import com.kristianfischer.projectzero.gameinput.KeyInput;
 import com.kristianfischer.projectzero.gameinput.KeyMapper;
 import com.kristianfischer.projectzero.gameobject.Player;
+import com.kristianfischer.projectzero.handler.DynamicObjectHandler;
 import com.kristianfischer.projectzero.handler.GameHandler;
 
 import java.awt.*;
@@ -33,6 +31,7 @@ public class Game extends Canvas implements Runnable{
         mKeyMapper.setKeyMapping(KeyEvent.VK_A, new MoveLeftCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_D, new MoveRightCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_S, new MoveDownCommand());
+        mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
         this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
         new GameWindow(WIDTH, HEIGHT, "Space Invaders Clone!", this);
         mGameHandler.addGameObject(new Player(100, 100, GameId.Player));
@@ -69,6 +68,7 @@ public class Game extends Canvas implements Runnable{
             lastTime = now;
             while(delta >= 1) {
                 tick();
+                spawnNewObjects();
                 delta--;
             }
 
@@ -93,6 +93,12 @@ public class Game extends Canvas implements Runnable{
 
     private void tick() {
         mGameHandler.tick();
+    }
+
+    private void spawnNewObjects() {
+        while( DynamicObjectHandler.getInstance().hasNextGameObject() ) {
+            mGameHandler.addGameObject( DynamicObjectHandler.getInstance().getNextGameObject() );
+        }
     }
 
     private void render() {

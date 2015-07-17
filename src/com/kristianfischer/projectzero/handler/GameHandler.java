@@ -3,17 +3,26 @@ package com.kristianfischer.projectzero.handler;
 import com.kristianfischer.projectzero.gameobject.GameObject;
 
 import java.awt.*;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by kristianhfischer on 7/6/15.
  */
 public class GameHandler  {
 
-    public LinkedList<GameObject> gameObjects = new LinkedList<>();
+    private static final GameHandler INSTANCE = new GameHandler();
+    private ConcurrentLinkedQueue<GameObject> gameObjects;
+    private GameHandler() { gameObjects = new ConcurrentLinkedQueue<>(); }
+
+    public static GameHandler getInstance() { return INSTANCE; }
 
     public void tick() {
-        for( GameObject object : gameObjects ) {
+        Iterator<GameObject> iterator = gameObjects.iterator();
+        while( iterator.hasNext() ) {
+            GameObject object = iterator.next();
             object.tick();
         }
 
@@ -31,5 +40,9 @@ public class GameHandler  {
 
     public void removeGameObject( GameObject gameObject ) {
         gameObjects.remove(gameObject);
+    }
+
+    public Iterator<GameObject> getGameObjectIterator() {
+        return gameObjects.iterator();
     }
 }

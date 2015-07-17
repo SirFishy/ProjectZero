@@ -1,6 +1,8 @@
 package com.kristianfischer.projectzero.gameobject;
 
+import com.kristianfischer.projectzero.component.CollisionComponent;
 import com.kristianfischer.projectzero.game.GameId;
+import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 
 import java.awt.*;
 
@@ -12,18 +14,38 @@ public abstract class GameObject {
     protected int xPosition, yPosition;
     protected int xVelocity, yVelocity;
     protected int speed;
+    protected CollisionComponent collisionComponent;
     protected GameId gameId;
 
-    /**
-     *
-     * @param xPosition - The x-axis position of the game Object in the 2D world
-     * @param yPosition - The y-axis position of the game Object in the 2D world
-     * @param id - Identification of game object
-     */
-    public GameObject( int xPosition, int yPosition, GameId id) {
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        gameId = id;
+
+
+    public static abstract class AbstractBuilder<T> {
+        private int xPosition = 0;
+        private int yPosition = 0;
+        private int xVelocity = 0;
+        private int yVelocity = 0;
+        private int speed = 0;
+        private GameId gameId = GameId.None;
+        private CollisionComponent collisionComponent = null;
+        protected abstract T self();
+        public T xPosition( int xPosition ) { this.xPosition = xPosition; return self(); }
+        public T yPosition( int yPosition ) { this.yPosition = yPosition; return self(); }
+        public T xVelocity( int xVelocity ) { this.xVelocity = xVelocity; return self(); }
+        public T yVelocity( int yVelocity ) { this.yVelocity = yVelocity; return self(); }
+        public T gameId( GameId gameId ) { this.gameId = gameId; return self(); }
+        public T speed( int speed ) { this.speed = speed; return self(); }
+        public T collisionComponent( CollisionComponent collisionComponent )
+            { this.collisionComponent = collisionComponent; return self(); }
+    }
+
+    public GameObject( AbstractBuilder builder ) {
+        this.xPosition = builder.xPosition;
+        this.yPosition = builder.yPosition;
+        this.gameId = builder.gameId;
+        this.xVelocity = builder.xVelocity;
+        this.yVelocity = builder.yVelocity;
+        this.speed = builder.speed;
+        this.collisionComponent = builder.collisionComponent;
     }
 
     public abstract void tick();
@@ -77,4 +99,5 @@ public abstract class GameObject {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
+
 }

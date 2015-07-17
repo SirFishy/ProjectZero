@@ -6,5 +6,6 @@ package com.kristianfischer.projectzero.game;
 public enum GameId {
     Player(),
     Projectile(),
-    Enemy();
+    Enemy(),
+    None();
 }

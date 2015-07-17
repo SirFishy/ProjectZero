@@ -7,6 +7,7 @@ import com.kristianfischer.projectzero.gameobject.GameObject;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
 
 /**
  * Created by kristianhfischer on 7/6/15.
@@ -25,7 +26,9 @@ public class KeyInput extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         //super.keyPressed(e);
         int key = e.getKeyCode();
-        for(GameObject object : mGameHandler.gameObjects ) {
+        Iterator<GameObject> iterator = mGameHandler.getGameObjectIterator();
+        while( iterator.hasNext() ) {
+            GameObject object = iterator.next();
             if( object.getGameId() == GameId.Player ) {
                 System.out.println("Key pressed: " + e.getKeyChar());
                 handlePlayerKeyPressed(key, object);
@@ -37,7 +40,9 @@ public class KeyInput extends KeyAdapter {
     public void keyReleased(KeyEvent e) {
         //super.keyReleased(e);
         int key = e.getKeyCode();
-        for(GameObject object : mGameHandler.gameObjects ) {
+        Iterator<GameObject> iterator = mGameHandler.getGameObjectIterator();
+        while( iterator.hasNext() ) {
+            GameObject object = iterator.next();
             if( object.getGameId() == GameId.Player ) {
                 System.out.println("Key released: " + e.getKeyChar());
                 handlePlayerKeyReleased(key, object);

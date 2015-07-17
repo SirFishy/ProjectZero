@@ -4,7 +4,7 @@ import com.kristianfischer.projectzero.command.*;
 import com.kristianfischer.projectzero.gameinput.KeyInput;
 import com.kristianfischer.projectzero.gameinput.KeyMapper;
 import com.kristianfischer.projectzero.gameobject.Player;
-import com.kristianfischer.projectzero.handler.DynamicObjectHandler;
+import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 import com.kristianfischer.projectzero.handler.GameHandler;
 
 import java.awt.*;
@@ -18,6 +18,7 @@ public class Game extends Canvas implements Runnable{
 
     public static final int WIDTH = 640;
     public static final int HEIGHT = WIDTH / 12 * 9;
+    public static final double NUMBER_OF_TICKS = 60;
 
     private boolean mRunning = false;
     private Thread mGameThread;
@@ -25,7 +26,7 @@ public class Game extends Canvas implements Runnable{
     private KeyMapper mKeyMapper;
 
     public Game() {
-        mGameHandler = new GameHandler();
+        mGameHandler = GameHandler.getInstance();
         mKeyMapper = new KeyMapper();
         mKeyMapper.setKeyMapping(KeyEvent.VK_W, new MoveUpCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_A, new MoveLeftCommand());
@@ -34,7 +35,11 @@ public class Game extends Canvas implements Runnable{
         mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
         this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
         new GameWindow(WIDTH, HEIGHT, "Space Invaders Clone!", this);
-        mGameHandler.addGameObject(new Player(100, 100, GameId.Player));
+        mGameHandler.addGameObject(new Player.Builder()
+                .xPosition(100)
+                .yPosition(100)
+                .gameId(GameId.Player)
+                .speed(5).build());
 
     }
 
@@ -57,8 +62,7 @@ public class Game extends Canvas implements Runnable{
     @Override
     public void run() {
         long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0;
-        double ns = 1000000000 / amountOfTicks;
+        double ns = 1000000000 / NUMBER_OF_TICKS;
         double delta = 0;
         long timer = System.currentTimeMillis();
         int frames = 0;
@@ -69,6 +73,7 @@ public class Game extends Canvas implements Runnable{
             while(delta >= 1) {
                 tick();
                 spawnNewObjects();
+                deleteDestroyedObjects();
                 delta--;
             }
 
@@ -96,8 +101,14 @@ public class Game extends Canvas implements Runnable{
     }
 
     private void spawnNewObjects() {
-        while( DynamicObjectHandler.getInstance().hasNextGameObject() ) {
-            mGameHandler.addGameObject( DynamicObjectHandler.getInstance().getNextGameObject() );
+        while( DynamicGameObjectHandler.getInstance().hasNextNewGameObject() ) {
+            mGameHandler.addGameObject( DynamicGameObjectHandler.getInstance().getNextNewGameObject() );
+        }
+    }
+
+    private void deleteDestroyedObjects() {
+        while( DynamicGameObjectHandler.getInstance().hasNextDestroyedGameObject() ) {
+            mGameHandler.removeGameObject( DynamicGameObjectHandler.getInstance().getNextDestroyedGameObject() );
         }
     }
 

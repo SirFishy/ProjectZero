@@ -1,11 +1,11 @@
-package com.kristianfischer.projectzero.state;
+package com.kristianfischer.projectzero.handler;
 
 import com.kristianfischer.projectzero.gameobject.GameObject;
 
 /**
  * Created by kristianhfischer on 7/13/15.
  */
-public class PlayerMovementHandler {
+public class MovementHandler {
 
     private MovementDirection verticalState;
     private MovementDirection horizontalState;
@@ -21,7 +21,7 @@ public class PlayerMovementHandler {
         NONE;
     }
 
-    public PlayerMovementHandler(GameObject object) {
+    public MovementHandler(GameObject object) {
         verticalState = MovementDirection.NONE;
         horizontalState = MovementDirection.NONE;
         mNumHorizontalButtonsPressed = 0;
@@ -29,7 +29,7 @@ public class PlayerMovementHandler {
         this.object = object;
     }
 
-    public void movePlayer(MovementDirection direction) {
+    public void move(MovementDirection direction) {
         switch(direction) {
             case UP:
                 object.setyVelocity( -1 * object.getSpeed() );
@@ -57,7 +57,7 @@ public class PlayerMovementHandler {
 
     }
 
-    public void stopPlayer( MovementDirection direction ) {
+    public void stopMoving(MovementDirection direction) {
         switch(direction) {
             case UP:
                 mNumVerticalButtonsPressed--;

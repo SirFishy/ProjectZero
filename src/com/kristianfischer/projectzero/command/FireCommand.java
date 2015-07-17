@@ -21,6 +21,8 @@ public class FireCommand extends Command {
 
     @Override
     public void stop(GameObject object) {
-
+        if( object.getGameId().equals(GameId.Player) ) {
+            ((Player) object).ceaseFire();
+        }
     }
 }

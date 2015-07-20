@@ -20,25 +20,31 @@ public class CollisionHandler {
     private GameHandler mGameHandler;
 
     public void handleCollisions( GameHandler gameHandler ) {
-        Iterator<GameObject> players = gameHandler.getPlayerIterator();
-        Iterator<GameObject> projectiles = gameHandler.getProjectileIterator();
-        while( players.hasNext() ) {
+        Iterator<GameObject> players;
+        Iterator<GameObject> projectiles;
+        for( players = gameHandler.getPlayerIterator(); players.hasNext(); ) {
             Player player = (Player) players.next();
-            while( projectiles.hasNext() ) {
+            for( projectiles = gameHandler.getProjectileIterator(); projectiles.hasNext(); ) {
                 GameObject projectile = projectiles.next();
                 if( projectile.getGameId().equals(GameId.ENEMY_PROJECTILE)) {
-                    System.out.println("Found enemy projectile");
                     if( player.getCollisionComponent().getHitbox().detectCollision(projectile) )
                         System.out.println("Player collided with enemy projectile");
                 }
             }
         }
 
-        Iterator<GameObject> enemies = gameHandler.getEnemyIterator();
-        projectiles = gameHandler.getProjectileIterator();
+        Iterator<GameObject> enemies;
 
-        while( enemies.hasNext() ) {
-
+        for( enemies = gameHandler.getEnemyIterator(); enemies.hasNext(); ) {
+            GameObject enemy = enemies.next();
+            for( projectiles = gameHandler.getProjectileIterator(); projectiles.hasNext(); ) {
+                GameObject projectile = projectiles.next();
+                if( projectile.getGameId().equals(GameId.PLAYER_PROJECTILE)) {
+                    if( enemy.getCollisionComponent().getHitbox().detectCollision(projectile) ) {
+                        System.out.println("Enemy collided with player projectile");
+                    }
+                }
+            }
         }
 
 

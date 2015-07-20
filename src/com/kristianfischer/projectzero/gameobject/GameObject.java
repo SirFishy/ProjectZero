@@ -14,6 +14,8 @@ public abstract class GameObject {
 
     protected int xPosition, yPosition;
     protected int xVelocity, yVelocity;
+    protected int width;
+    protected int height;
     protected int speed;
     protected boolean isActive;
     protected List<GameComponent> componentList;
@@ -26,6 +28,8 @@ public abstract class GameObject {
         private int yPosition = 0;
         private int xVelocity = 0;
         private int yVelocity = 0;
+        private int width = 0;
+        private int height = 0;
         private int speed = 0;
         private boolean isActive = false;
         private GameId gameId = GameId.NONE;
@@ -35,6 +39,8 @@ public abstract class GameObject {
         protected abstract T self();
         public T xPosition( int xPosition ) { this.xPosition = xPosition; return self(); }
         public T yPosition( int yPosition ) { this.yPosition = yPosition; return self(); }
+        public T width( int width ) { this.width = width; return self(); }
+        public T height( int height ) { this.height = height; return self(); }
         public T xVelocity( int xVelocity ) { this.xVelocity = xVelocity; return self(); }
         public T yVelocity( int yVelocity ) { this.yVelocity = yVelocity; return self(); }
         public T isActive( boolean isActive ) { this.isActive = isActive; return  self(); }
@@ -49,11 +55,15 @@ public abstract class GameObject {
     public GameObject( AbstractBuilder builder ) {
         this.xPosition = builder.xPosition;
         this.yPosition = builder.yPosition;
+        this.width = builder.width;
+        this.height = builder.height;
         this.gameId = builder.gameId;
         this.xVelocity = builder.xVelocity;
         this.yVelocity = builder.yVelocity;
         this.speed = builder.speed;
         this.isActive = builder.isActive;
+        this.collisionComponent = builder.collisionComponent;
+        this.movementComponent = builder.movementComponent;
         this.componentList = builder.componentList;
     }
 
@@ -122,4 +132,20 @@ public abstract class GameObject {
     }
 
     public List<GameComponent> getGameComponents() { return componentList; }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 }

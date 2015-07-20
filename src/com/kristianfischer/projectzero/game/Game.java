@@ -7,6 +7,7 @@ import com.kristianfischer.projectzero.gameinput.KeyInput;
 import com.kristianfischer.projectzero.gameinput.KeyMapper;
 import com.kristianfischer.projectzero.gameobject.Laser;
 import com.kristianfischer.projectzero.gameobject.Player;
+import com.kristianfischer.projectzero.gameobject.SpaceGrunt;
 import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 import com.kristianfischer.projectzero.handler.CollisionHandler;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
@@ -45,6 +46,8 @@ public class Game extends Canvas implements Runnable{
         Player player = new Player.Builder()
                 .xPosition(100)
                 .yPosition(100)
+                .width(32)
+                .height(32)
                 .gameId(GameId.PLAYER)
                 .speed(5)
                 .isActive(true)
@@ -54,12 +57,28 @@ public class Game extends Canvas implements Runnable{
         player.getCollisionComponent().setHitbox(new Hitbox.Builder(player)
                 .rectangle(new Rectangle(player.getxPosition(),
                         player.getyPosition(),
-                        player.RENDER_WIDTH,
-                        player.RENDER_HEIGHT))
+                        player.getWidth(),
+                        player.getHeight()))
+                .build());
+        SpaceGrunt grunt = new SpaceGrunt.Builder()
+                .xPosition(10)
+                .yPosition(10)
+                .width(32)
+                .height(32)
+                .gameId(GameId.ENEMY)
+                .speed(5)
+                .isActive(true)
+                .movementComponent(new MovementGameComponent())
+                .collisionComponent(new CollisionGameComponent())
+                .build();
+        grunt.getCollisionComponent().setHitbox(new Hitbox.Builder(grunt)
+                .rectangle(new Rectangle(grunt.getxPosition(),
+                        grunt.getyPosition(),
+                        grunt.getWidth(),
+                        grunt.getHeight()))
                 .build());
         mGameHandler.addGameObject(player);
-
-
+        mGameHandler.addGameObject(grunt);
     }
 
     public synchronized void start() {
@@ -129,13 +148,14 @@ public class Game extends Canvas implements Runnable{
                 .speed(5)
                 .isActive(true)
                 .collisionComponent(new CollisionGameComponent())
+                .movementComponent(new MovementGameComponent())
                 .build();
-        projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
+            projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
                 .rectangle(new Rectangle(projectile.getxPosition(),
                         projectile.getyPosition(), Laser.RENDER_WIDTH, Laser.RENDER_HEIGHT))
                 .build());
-        projectile.setyVelocity( projectile.getSpeed() );
-        DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
+            projectile.setyVelocity( projectile.getSpeed() );
+            DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
         }
         //System.out.println(debugInt);
         debugInt++;

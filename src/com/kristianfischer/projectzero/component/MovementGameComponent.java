@@ -37,7 +37,7 @@ public class MovementGameComponent extends GameComponent {
 
     @Override
     public void update( ) {
-        mGameObject.setxPosition(mGameObject.getxPosition() + mGameObject.getxVelocity());
+        mGameObject.setxPosition( mGameObject.getxPosition() + mGameObject.getxVelocity() );
         mGameObject.setyPosition( mGameObject.getyPosition() + mGameObject.getyVelocity() );
     }
 
@@ -117,5 +117,13 @@ public class MovementGameComponent extends GameComponent {
                 break;
         }
 
+    }
+
+    public MovementDirection getVerticalState() {
+        return verticalState;
+    }
+
+    public MovementDirection getHorizontalState() {
+        return horizontalState;
     }
 }

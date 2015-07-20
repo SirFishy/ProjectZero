@@ -13,11 +13,27 @@ public class MoveDownCommand extends Command {
         if(object.getGameId().equals(GameId.PLAYER)) {
             object.getMovementComponent().move(MovementGameComponent.MovementDirection.DOWN);
         }
+
+        if( object.getGameId().equals(GameId.ENEMY)) {
+            object.getMovementComponent().move(MovementGameComponent.MovementDirection.DOWN);
+        }
+
+        if( object.getGameId().equals(GameId.ENEMY_PROJECTILE)) {
+            object.getMovementComponent().move(MovementGameComponent.MovementDirection.DOWN);
+        }
     }
 
     @Override
     public void stop(GameObject object) {
         if(object.getGameId().equals(GameId.PLAYER)) {
+            object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.DOWN);
+        }
+
+        if( object.getGameId().equals(GameId.ENEMY)) {
+            object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.DOWN);
+        }
+
+        if( object.getGameId().equals(GameId.ENEMY_PROJECTILE)) {
             object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.DOWN);
         }
     }

@@ -1,6 +1,10 @@
 package com.kristianfischer.projectzero.gameobject;
 
+import com.kristianfischer.projectzero.artificalbehavior.Behavior;
+import com.kristianfischer.projectzero.artificalbehavior.EnemyProjectileBehavior;
+import com.kristianfischer.projectzero.artificalbehavior.PlayerProjectileBehavior;
 import com.kristianfischer.projectzero.game.Game;
+import com.kristianfischer.projectzero.game.GameId;
 import com.kristianfischer.projectzero.handler.ComponentHandler;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 
@@ -13,6 +17,7 @@ public class Laser extends GameObject {
 
     public final static int RENDER_HEIGHT = 10;
     public final static int RENDER_WIDTH = 5;
+    private Behavior behavior;
 
     public static class Builder extends AbstractBuilder<Builder> {
 
@@ -29,16 +34,16 @@ public class Laser extends GameObject {
     public Laser(Builder builder) {
         super(builder);
         ComponentHandler.getInstance().initialize(this);
+        if( gameId.equals(GameId.PLAYER_PROJECTILE) )
+            behavior = new PlayerProjectileBehavior(this);
+        else if( gameId.equals(GameId.ENEMY_PROJECTILE) )
+            behavior = new EnemyProjectileBehavior(this);
     }
 
     @Override
     public void tick() {
-        yPosition += yVelocity;
-        if( yPosition < 0 || yPosition > Game.HEIGHT ) {
-            System.out.println("Destorying Laser");
-            DynamicGameObjectHandler.getInstance().addDestroyedGameObject(this);
-        }
         ComponentHandler.getInstance().update(this);
+        behavior.update();
     }
 
     @Override

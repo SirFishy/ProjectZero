@@ -37,6 +37,10 @@ public class CollisionHandler {
         Iterator<GameObject> enemies = gameHandler.getEnemyIterator();
         projectiles = gameHandler.getProjectileIterator();
 
+        while( enemies.hasNext() ) {
+
+        }
+
 
     }
 

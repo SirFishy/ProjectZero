@@ -1,8 +1,8 @@
 package com.kristianfischer.projectzero.game;
 
 import com.kristianfischer.projectzero.command.*;
-import com.kristianfischer.projectzero.component.CollisionComponent;
-import com.kristianfischer.projectzero.component.MovementComponent;
+import com.kristianfischer.projectzero.component.CollisionGameComponent;
+import com.kristianfischer.projectzero.component.MovementGameComponent;
 import com.kristianfischer.projectzero.gameinput.KeyInput;
 import com.kristianfischer.projectzero.gameinput.KeyMapper;
 import com.kristianfischer.projectzero.gameobject.Laser;
@@ -48,8 +48,8 @@ public class Game extends Canvas implements Runnable{
                 .gameId(GameId.PLAYER)
                 .speed(5)
                 .isActive(true)
-                .movementComponent(new MovementComponent())
-                .collisionComponent(new CollisionComponent())
+                .movementComponent(new MovementGameComponent())
+                .collisionComponent(new CollisionGameComponent())
                 .build();
         player.getCollisionComponent().setHitbox(new Hitbox.Builder(player)
                 .rectangle(new Rectangle(player.getxPosition(),
@@ -128,7 +128,7 @@ public class Game extends Canvas implements Runnable{
                 .gameId(GameId.ENEMY_PROJECTILE)
                 .speed(5)
                 .isActive(true)
-                .collisionComponent(new CollisionComponent())
+                .collisionComponent(new CollisionGameComponent())
                 .build();
         projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
                 .rectangle(new Rectangle(projectile.getxPosition(),

@@ -5,7 +5,7 @@ import com.kristianfischer.projectzero.gameobject.GameObject;
 /**
  * Created by kristianhfischer on 7/13/15.
  */
-public class MovementComponent extends Component{
+public class MovementGameComponent extends GameComponent {
 
     private MovementDirection verticalState;
     private MovementDirection horizontalState;
@@ -21,7 +21,7 @@ public class MovementComponent extends Component{
         NONE
     }
 
-    public MovementComponent( ) {
+    public MovementGameComponent() {
     }
 
     @Override

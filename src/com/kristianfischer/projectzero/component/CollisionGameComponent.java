@@ -6,12 +6,12 @@ import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 /**
  * Created by kristianhfischer on 7/16/15.
  */
-public class CollisionComponent extends Component {
+public class CollisionGameComponent extends GameComponent {
 
     private GameObject mGameObject;
     private Hitbox mHitbox;
 
-    public CollisionComponent( ) {
+    public CollisionGameComponent() {
     }
 
     @Override

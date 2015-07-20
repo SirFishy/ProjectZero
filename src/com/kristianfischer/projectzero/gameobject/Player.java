@@ -1,6 +1,6 @@
 package com.kristianfischer.projectzero.gameobject;
 
-import com.kristianfischer.projectzero.component.CollisionComponent;
+import com.kristianfischer.projectzero.component.CollisionGameComponent;
 import com.kristianfischer.projectzero.game.Game;
 import com.kristianfischer.projectzero.game.GameId;
 import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
@@ -70,7 +70,7 @@ public class Player extends GameObject {
                     .gameId(GameId.PLAYER_PROJECTILE)
                     .speed(5)
                     .isActive(true)
-                    .collisionComponent(new CollisionComponent())
+                    .collisionComponent(new CollisionGameComponent())
                     .build();
             projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
                     .rectangle(new Rectangle(projectile.getxPosition(),

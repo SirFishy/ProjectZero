@@ -1,10 +1,11 @@
 package com.kristianfischer.projectzero.gameobject;
 
-import com.kristianfischer.projectzero.component.CollisionComponent;
-import com.kristianfischer.projectzero.component.MovementComponent;
+import com.kristianfischer.projectzero.component.*;
 import com.kristianfischer.projectzero.game.GameId;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kristianhfischer on 7/6/15.
@@ -15,8 +16,9 @@ public abstract class GameObject {
     protected int xVelocity, yVelocity;
     protected int speed;
     protected boolean isActive;
-    protected CollisionComponent collisionComponent;
-    protected MovementComponent movementComponent;
+    protected List<GameComponent> componentList;
+    protected CollisionGameComponent collisionComponent;
+    protected MovementGameComponent movementComponent;
     protected GameId gameId;
 
     public static abstract class AbstractBuilder<T> {
@@ -27,8 +29,9 @@ public abstract class GameObject {
         private int speed = 0;
         private boolean isActive = false;
         private GameId gameId = GameId.NONE;
-        private CollisionComponent collisionComponent = null;
-        private MovementComponent movementComponent = null;
+        private List<GameComponent> componentList = new ArrayList<>();
+        private CollisionGameComponent collisionComponent;
+        private MovementGameComponent movementComponent;
         protected abstract T self();
         public T xPosition( int xPosition ) { this.xPosition = xPosition; return self(); }
         public T yPosition( int yPosition ) { this.yPosition = yPosition; return self(); }
@@ -37,10 +40,10 @@ public abstract class GameObject {
         public T isActive( boolean isActive ) { this.isActive = isActive; return  self(); }
         public T gameId( GameId gameId ) { this.gameId = gameId; return self(); }
         public T speed( int speed ) { this.speed = speed; return self(); }
-        public T collisionComponent( CollisionComponent collisionComponent )
-            { this.collisionComponent = collisionComponent; return self(); }
-        public T movementComponent( MovementComponent movementComponent )
-            { this.movementComponent = movementComponent; return self(); }
+        public T collisionComponent( CollisionGameComponent collisionComponent )
+            { this.collisionComponent = collisionComponent; this.componentList.add( collisionComponent ); return self(); }
+        public T movementComponent( MovementGameComponent movementComponent )
+            { this.movementComponent = movementComponent; this.componentList.add( movementComponent ); return self(); }
     }
 
     public GameObject( AbstractBuilder builder ) {
@@ -51,8 +54,7 @@ public abstract class GameObject {
         this.yVelocity = builder.yVelocity;
         this.speed = builder.speed;
         this.isActive = builder.isActive;
-        this.collisionComponent = builder.collisionComponent;
-        this.movementComponent = builder.movementComponent;
+        this.componentList = builder.componentList;
     }
 
     public abstract void tick();
@@ -111,11 +113,13 @@ public abstract class GameObject {
         return isActive;
     }
 
-    public CollisionComponent getCollisionComponent() {
+    public CollisionGameComponent getCollisionComponent() {
         return collisionComponent;
     }
 
-    public MovementComponent getMovementComponent() {
+    public MovementGameComponent getMovementComponent() {
         return movementComponent;
     }
+
+    public List<GameComponent> getGameComponents() { return componentList; }
 }

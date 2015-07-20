@@ -29,7 +29,7 @@ public class KeyInput extends KeyAdapter {
         Iterator<GameObject> iterator = mGameHandler.getGameObjectIterator();
         while( iterator.hasNext() ) {
             GameObject object = iterator.next();
-            if( object.getGameId() == GameId.Player ) {
+            if( object.getGameId() == GameId.PLAYER) {
                 System.out.println("Key pressed: " + e.getKeyChar());
                 handlePlayerKeyPressed(key, object);
             }
@@ -43,7 +43,7 @@ public class KeyInput extends KeyAdapter {
         Iterator<GameObject> iterator = mGameHandler.getGameObjectIterator();
         while( iterator.hasNext() ) {
             GameObject object = iterator.next();
-            if( object.getGameId() == GameId.Player ) {
+            if( object.getGameId() == GameId.PLAYER) {
                 System.out.println("Key released: " + e.getKeyChar());
                 handlePlayerKeyReleased(key, object);
             }

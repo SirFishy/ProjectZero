@@ -14,14 +14,14 @@ public class FireCommand extends Command {
 
     @Override
     public void execute(GameObject object) {
-        if( object.getGameId().equals(GameId.Player) ) {
+        if( object.getGameId().equals(GameId.PLAYER) ) {
             ((Player) object).fire();
         }
     }
 
     @Override
     public void stop(GameObject object) {
-        if( object.getGameId().equals(GameId.Player) ) {
+        if( object.getGameId().equals(GameId.PLAYER) ) {
             ((Player) object).ceaseFire();
         }
     }

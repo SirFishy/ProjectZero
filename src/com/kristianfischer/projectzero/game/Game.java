@@ -1,9 +1,14 @@
 package com.kristianfischer.projectzero.game;
 
 import com.kristianfischer.projectzero.command.*;
+import com.kristianfischer.projectzero.component.CollisionComponent;
+import com.kristianfischer.projectzero.component.MovementComponent;
 import com.kristianfischer.projectzero.gameinput.KeyInput;
 import com.kristianfischer.projectzero.gameinput.KeyMapper;
+import com.kristianfischer.projectzero.gameobject.Laser;
 import com.kristianfischer.projectzero.gameobject.Player;
+import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
+import com.kristianfischer.projectzero.handler.CollisionHandler;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 import com.kristianfischer.projectzero.handler.GameHandler;
 
@@ -20,6 +25,8 @@ public class Game extends Canvas implements Runnable{
     public static final int HEIGHT = WIDTH / 12 * 9;
     public static final double NUMBER_OF_TICKS = 60;
 
+    private int debugInt = 0;
+
     private boolean mRunning = false;
     private Thread mGameThread;
     private GameHandler mGameHandler;
@@ -35,11 +42,23 @@ public class Game extends Canvas implements Runnable{
         mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
         this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
         new GameWindow(WIDTH, HEIGHT, "Space Invaders Clone!", this);
-        mGameHandler.addGameObject(new Player.Builder()
+        Player player = new Player.Builder()
                 .xPosition(100)
                 .yPosition(100)
-                .gameId(GameId.Player)
-                .speed(5).build());
+                .gameId(GameId.PLAYER)
+                .speed(5)
+                .isActive(true)
+                .movementComponent(new MovementComponent())
+                .collisionComponent(new CollisionComponent())
+                .build();
+        player.getCollisionComponent().setHitbox(new Hitbox.Builder(player)
+                .rectangle(new Rectangle(player.getxPosition(),
+                        player.getyPosition(),
+                        player.RENDER_WIDTH,
+                        player.RENDER_HEIGHT))
+                .build());
+        mGameHandler.addGameObject(player);
+
 
     }
 
@@ -72,6 +91,7 @@ public class Game extends Canvas implements Runnable{
             lastTime = now;
             while(delta >= 1) {
                 tick();
+                detectCollisions();
                 spawnNewObjects();
                 deleteDestroyedObjects();
                 delta--;
@@ -101,6 +121,27 @@ public class Game extends Canvas implements Runnable{
     }
 
     private void spawnNewObjects() {
+        if( debugInt % 200 == 0) {
+            Laser projectile = new Laser.Builder()
+                .xPosition(WIDTH / 2)
+                .yPosition(1)
+                .gameId(GameId.ENEMY_PROJECTILE)
+                .speed(5)
+                .isActive(true)
+                .collisionComponent(new CollisionComponent())
+                .build();
+        projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
+                .rectangle(new Rectangle(projectile.getxPosition(),
+                        projectile.getyPosition(), Laser.RENDER_WIDTH, Laser.RENDER_HEIGHT))
+                .build());
+        projectile.setyVelocity( projectile.getSpeed() );
+        DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
+        }
+        //System.out.println(debugInt);
+        debugInt++;
+        if( debugInt == Integer.MAX_VALUE) {
+            debugInt = 0;
+        }
         while( DynamicGameObjectHandler.getInstance().hasNextNewGameObject() ) {
             mGameHandler.addGameObject( DynamicGameObjectHandler.getInstance().getNextNewGameObject() );
         }
@@ -108,8 +149,12 @@ public class Game extends Canvas implements Runnable{
 
     private void deleteDestroyedObjects() {
         while( DynamicGameObjectHandler.getInstance().hasNextDestroyedGameObject() ) {
-            mGameHandler.removeGameObject( DynamicGameObjectHandler.getInstance().getNextDestroyedGameObject() );
+            mGameHandler.removeGameObject(DynamicGameObjectHandler.getInstance().getNextDestroyedGameObject());
         }
+    }
+
+    private void detectCollisions() {
+        CollisionHandler.getInstance().handleCollisions(mGameHandler);
     }
 
     private void render() {

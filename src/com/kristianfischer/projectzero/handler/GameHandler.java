@@ -1,5 +1,6 @@
 package com.kristianfischer.projectzero.handler;
 
+import com.kristianfischer.projectzero.game.GameId;
 import com.kristianfischer.projectzero.gameobject.GameObject;
 
 import java.awt.*;
@@ -15,7 +16,15 @@ public class GameHandler  {
 
     private static final GameHandler INSTANCE = new GameHandler();
     private ConcurrentLinkedQueue<GameObject> gameObjects;
-    private GameHandler() { gameObjects = new ConcurrentLinkedQueue<>(); }
+    private ConcurrentLinkedQueue<GameObject> players;
+    private ConcurrentLinkedQueue<GameObject> enemies;
+    private ConcurrentLinkedQueue<GameObject> projectiles;
+    private GameHandler() {
+        gameObjects = new ConcurrentLinkedQueue<>();
+        players = new ConcurrentLinkedQueue<>();
+        enemies = new ConcurrentLinkedQueue<>();
+        projectiles = new ConcurrentLinkedQueue<>();
+    }
 
     public static GameHandler getInstance() { return INSTANCE; }
 
@@ -29,20 +38,48 @@ public class GameHandler  {
     }
 
     public void render(Graphics g) {
-        for( GameObject object : gameObjects ) {
+        Iterator<GameObject> iterator = gameObjects.iterator();
+        while( iterator.hasNext() ) {
+            GameObject object = iterator.next();
             object.render(g);
         }
     }
 
     public void addGameObject( GameObject gameObject ) {
         gameObjects.add(gameObject);
+        if( gameObject.getGameId().equals( GameId.PLAYER )) {
+            System.out.println("Added Player");
+            players.add(gameObject);
+        }
+        if( gameObject.getGameId().equals( GameId.ENEMY )) {
+            System.out.println("Added Enemy");
+            enemies.add(gameObject);
+        }
+        if( gameObject.getGameId().equals(GameId.PLAYER_PROJECTILE) ||
+                gameObject.getGameId().equals(GameId.ENEMY_PROJECTILE)) {
+            System.out.println("Added Projectile");
+            projectiles.add(gameObject);
+        }
     }
 
     public void removeGameObject( GameObject gameObject ) {
         gameObjects.remove(gameObject);
+        if( gameObject.getGameId().equals( GameId.PLAYER )) {
+            players.remove(gameObject);
+        }
+        if( gameObject.getGameId().equals( GameId.ENEMY )) {
+            enemies.remove(gameObject);
+        }
+        if( gameObject.getGameId().equals(GameId.PLAYER_PROJECTILE) ||
+                gameObject.getGameId().equals(GameId.ENEMY_PROJECTILE)) {
+            projectiles.remove(gameObject);
+        }
     }
 
     public Iterator<GameObject> getGameObjectIterator() {
         return gameObjects.iterator();
     }
+    public Iterator<GameObject> getPlayerIterator() { return players.iterator(); }
+    public Iterator<GameObject> getEnemyIterator() { return enemies.iterator(); }
+    public Iterator<GameObject> getProjectileIterator() { return projectiles.iterator(); }
 }

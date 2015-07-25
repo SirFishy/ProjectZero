@@ -1,5 +1,6 @@
 package com.kristianfischer.projectzero.gameobject;
 
+import com.kristianfischer.projectzero.artificalbehavior.Behavior;
 import com.kristianfischer.projectzero.artificalbehavior.SpaceGruntBehavior;
 import com.kristianfischer.projectzero.handler.ComponentHandler;
 
@@ -10,9 +11,7 @@ import java.awt.*;
  */
 public class SpaceGrunt extends GameObject {
 
-    public final static int RENDER_HEIGHT = 32;
-    public final static int RENDER_WIDTH = 32;
-    private SpaceGruntBehavior behavior;
+    private Behavior behavior;
 
     public static class Builder extends AbstractBuilder<Builder> {
 
@@ -41,6 +40,6 @@ public class SpaceGrunt extends GameObject {
     @Override
     public void render(Graphics g) {
         g.setColor(Color.white);
-        g.fillRect(xPosition, yPosition, RENDER_WIDTH, RENDER_HEIGHT);
+        g.fillRect(xPosition, yPosition, width, height);
     }
 }

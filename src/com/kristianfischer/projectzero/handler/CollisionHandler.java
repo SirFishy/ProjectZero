@@ -17,8 +17,6 @@ public class CollisionHandler {
         return INSTANCE;
     }
 
-    private GameHandler mGameHandler;
-
     public void handleCollisions( GameHandler gameHandler ) {
         Iterator<GameObject> players;
         Iterator<GameObject> projectiles;

@@ -12,6 +12,7 @@ import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 import com.kristianfischer.projectzero.handler.CollisionHandler;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 import com.kristianfischer.projectzero.handler.GameHandler;
+import com.kristianfischer.projectzero.handler.HiveHandler;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -22,8 +23,10 @@ import java.awt.image.BufferStrategy;
  */
 public class Game extends Canvas implements Runnable{
 
-    public static final int WIDTH = 640;
-    public static final int HEIGHT = WIDTH / 12 * 9;
+    public static final int WIDTH = 800;
+    public static final int ACTUAL_HEIGHT = WIDTH / 16 * 9;
+    public static final int HEIGHT_PADDING = 25;
+    public static final int HEIGHT = ACTUAL_HEIGHT - HEIGHT_PADDING;
     public static final double NUMBER_OF_TICKS = 60;
 
     private int debugInt = 0;
@@ -42,7 +45,7 @@ public class Game extends Canvas implements Runnable{
         mKeyMapper.setKeyMapping(KeyEvent.VK_S, new MoveDownCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
         this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
-        new GameWindow(WIDTH, HEIGHT, "Space Invaders Clone!", this);
+        new GameWindow(WIDTH, ACTUAL_HEIGHT, "Space Invaders Clone!", this);
         Player player = new Player.Builder()
                 .xPosition(100)
                 .yPosition(100)
@@ -55,10 +58,7 @@ public class Game extends Canvas implements Runnable{
                 .collisionComponent(new CollisionGameComponent())
                 .build();
         player.getCollisionComponent().setHitbox(new Hitbox.Builder(player)
-                .rectangle(new Rectangle(player.getxPosition(),
-                        player.getyPosition(),
-                        player.getWidth(),
-                        player.getHeight()))
+                .rectangle(0, 0, player.getWidth(), player.getHeight())
                 .build());
         SpaceGrunt grunt = new SpaceGrunt.Builder()
                 .xPosition(10)
@@ -72,10 +72,7 @@ public class Game extends Canvas implements Runnable{
                 .collisionComponent(new CollisionGameComponent())
                 .build();
         grunt.getCollisionComponent().setHitbox(new Hitbox.Builder(grunt)
-                .rectangle(new Rectangle(grunt.getxPosition(),
-                        grunt.getyPosition(),
-                        grunt.getWidth(),
-                        grunt.getHeight()))
+                .rectangle(0, 0, grunt.getWidth(), grunt.getHeight())
                 .build());
         mGameHandler.addGameObject(player);
         mGameHandler.addGameObject(grunt);
@@ -99,20 +96,19 @@ public class Game extends Canvas implements Runnable{
 
     @Override
     public void run() {
+        this.requestFocus();
         long lastTime = System.nanoTime();
         double ns = 1000000000 / NUMBER_OF_TICKS;
         double delta = 0;
         long timer = System.currentTimeMillis();
         int frames = 0;
         while( mRunning ) {
+
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
             while(delta >= 1) {
                 tick();
-                detectCollisions();
-                spawnNewObjects();
-                deleteDestroyedObjects();
                 delta--;
             }
 
@@ -120,13 +116,13 @@ public class Game extends Canvas implements Runnable{
                 render();
             }
 
-            frames++;
+            /*frames++;
 
             if( System.currentTimeMillis() - timer > 1000 ) {
                 timer += 1000;
                 System.out.println("FPS: " + frames);
                 frames = 0;
-            }
+            }*/
         }
         stop();
     }
@@ -135,25 +131,37 @@ public class Game extends Canvas implements Runnable{
         new Game();
     }
 
-    private void tick() {
-        mGameHandler.tick();
+    public static int clamp( int value, int valueMin, int valueMax) {
+        if( value < valueMin )
+            return valueMin;
+        if( value > valueMax )
+            return valueMax;
+        return value;
     }
 
+    private void tick() {
+        mGameHandler.tick();
+        spawnNewObjects();
+        detectCollisions();
+        deleteDestroyedObjects();
+        handleTheHive();
+    }
     private void spawnNewObjects() {
         if( debugInt % 200 == 0) {
             Laser projectile = new Laser.Builder()
-                .xPosition(WIDTH / 2)
-                .yPosition(1)
-                .gameId(GameId.ENEMY_PROJECTILE)
-                .speed(5)
-                .isActive(true)
-                .collisionComponent(new CollisionGameComponent())
-                .movementComponent(new MovementGameComponent())
-                .build();
+                    .xPosition(WIDTH / 2)
+                    .yPosition(1)
+                    .width(5)
+                    .height(10)
+                    .gameId(GameId.ENEMY_PROJECTILE)
+                    .speed(5)
+                    .isActive(true)
+                    .collisionComponent(new CollisionGameComponent())
+                    .movementComponent(new MovementGameComponent())
+                    .build();
             projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
-                .rectangle(new Rectangle(projectile.getxPosition(),
-                        projectile.getyPosition(), Laser.RENDER_WIDTH, Laser.RENDER_HEIGHT))
-                .build());
+                    .rectangle(0, 0, projectile.getWidth(), projectile.getHeight())
+                    .build());
             projectile.setyVelocity( projectile.getSpeed() );
             DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
         }
@@ -172,21 +180,19 @@ public class Game extends Canvas implements Runnable{
             mGameHandler.removeGameObject(DynamicGameObjectHandler.getInstance().getNextDestroyedGameObject());
         }
     }
-
-    private void detectCollisions() {
-        CollisionHandler.getInstance().handleCollisions(mGameHandler);
-    }
+    private void detectCollisions() { CollisionHandler.getInstance().handleCollisions(mGameHandler); }
+    private void handleTheHive() { HiveHandler.getInstance().updateHiveCommands(); }
 
     private void render() {
         BufferStrategy bufferStrategy = this.getBufferStrategy();
         if(bufferStrategy == null) {
-            this.createBufferStrategy(3);
+            this.createBufferStrategy(2);
             return;
         }
 
         Graphics g = bufferStrategy.getDrawGraphics();
         g.setColor(Color.black);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
+        g.fillRect(0, 0, WIDTH, ACTUAL_HEIGHT);
         mGameHandler.render(g);
         g.dispose();
         bufferStrategy.show();

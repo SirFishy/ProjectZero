@@ -15,8 +15,6 @@ import java.awt.*;
  */
 public class Laser extends GameObject {
 
-    public final static int RENDER_HEIGHT = 10;
-    public final static int RENDER_WIDTH = 5;
     private Behavior behavior;
 
     public static class Builder extends AbstractBuilder<Builder> {
@@ -49,6 +47,6 @@ public class Laser extends GameObject {
     @Override
     public void render(Graphics g) {
         g.setColor(Color.white);
-        g.fillRect(xPosition, yPosition, RENDER_WIDTH, RENDER_HEIGHT);
+        g.fillRect(xPosition, yPosition, width, height);
     }
 }

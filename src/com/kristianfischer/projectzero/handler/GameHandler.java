@@ -52,7 +52,7 @@ public class GameHandler  {
             players.add(gameObject);
         }
         if( gameObject.getGameId().equals( GameId.ENEMY )) {
-            System.out.println("Added Enemy");
+            System.out.println("Added SpaceGrunt");
             enemies.add(gameObject);
         }
         if( gameObject.getGameId().equals(GameId.PLAYER_PROJECTILE) ||

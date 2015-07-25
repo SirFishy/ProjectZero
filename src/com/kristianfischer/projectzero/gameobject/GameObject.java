@@ -18,6 +18,7 @@ public abstract class GameObject {
     protected int height;
     protected int speed;
     protected boolean isActive;
+    protected boolean isDestroyed;
     protected List<GameComponent> componentList;
     protected CollisionGameComponent collisionComponent;
     protected MovementGameComponent movementComponent;
@@ -65,6 +66,7 @@ public abstract class GameObject {
         this.collisionComponent = builder.collisionComponent;
         this.movementComponent = builder.movementComponent;
         this.componentList = builder.componentList;
+        isDestroyed = false;
     }
 
     public abstract void tick();
@@ -148,4 +150,8 @@ public abstract class GameObject {
     public void setWidth(int width) {
         this.width = width;
     }
+
+    public void setIsDestroyed( boolean isDestroyed ) { this.isDestroyed = isDestroyed; }
+
+    public boolean isDestroyed() { return isDestroyed; }
 }

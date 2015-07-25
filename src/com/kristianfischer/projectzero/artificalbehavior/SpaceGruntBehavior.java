@@ -6,15 +6,18 @@ import com.kristianfischer.projectzero.game.Game;
 import com.kristianfischer.projectzero.game.GameId;
 import com.kristianfischer.projectzero.gameobject.GameObject;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
+import com.kristianfischer.projectzero.handler.HiveHandler;
 
 /**
  * Created by kristianhfischer on 7/20/15.
  */
-public class SpaceGruntBehavior extends Behavior{
+public class SpaceGruntBehavior extends Behavior implements IHiveUnderling{
 
     private MovementGameComponent.MovementDirection mPreviousHorizontalDirection;
     private Command moveLeft, moveRight, moveDown;
     private int gruntSpeed;
+    private boolean mHasReachedBoundary;
+    private HiveHandler hiveHandler;
 
     public SpaceGruntBehavior(GameObject gameObject) throws IllegalStateException {
         super(gameObject);
@@ -25,8 +28,10 @@ public class SpaceGruntBehavior extends Behavior{
         moveRight = new MoveRightCommand();
         moveDown = new MoveDownCommand();
         moveRight.execute(this.gameObject);
+        mHasReachedBoundary = false;
         mPreviousHorizontalDirection = gameObject.getMovementComponent().getHorizontalState();
-
+        hiveHandler = HiveHandler.getInstance();
+        hiveHandler.registerUnderling(this);
     }
 
     public void update() {
@@ -40,15 +45,11 @@ public class SpaceGruntBehavior extends Behavior{
         boolean reachedGameOverLine = gameObject.getyPosition() + gameObject.getWidth() >= Game.HEIGHT - 32;
 
         if( passedRightBoundary ) {
+            mHasReachedBoundary = true;
             mPreviousHorizontalDirection = gameObject.getMovementComponent().getHorizontalState();
-            moveRight.stop(gameObject);
-            gameObject.setSpeed(gameObject.getHeight() + 10);
-            moveDown.execute(gameObject);
         } else if( passedLeftBoundary )  {
+            mHasReachedBoundary = true;
             mPreviousHorizontalDirection = gameObject.getMovementComponent().getHorizontalState();
-            moveLeft.stop(gameObject);
-            gameObject.setSpeed(gameObject.getHeight() + 10);
-            moveDown.execute(gameObject);
         } else if( movingDown ) {
             moveDown.stop(gameObject);
             gameObject.setSpeed( gruntSpeed );
@@ -59,8 +60,32 @@ public class SpaceGruntBehavior extends Behavior{
             }
         }
 
+        if( gameObject.isDestroyed() ) {
+            hiveHandler.unregisterUnderling(this);
+        }
+
         if( reachedGameOverLine ) {
+            hiveHandler.unregisterUnderling(this);
+            gameObject.setIsActive(false);
+            gameObject.setIsDestroyed(true);
             DynamicGameObjectHandler.getInstance().addDestroyedGameObject(gameObject);
         }
+    }
+
+    @Override
+    public void prepareDescent( ) {
+        gameObject.setSpeed( gameObject.getHeight() + 10 );
+        if( mPreviousHorizontalDirection.equals(MovementGameComponent.MovementDirection.LEFT) ) {
+            moveLeft.stop(gameObject);
+        } else {
+            moveRight.stop(gameObject);
+        }
+        moveDown.execute(gameObject);
+        mHasReachedBoundary = false;
+    }
+
+    @Override
+    public boolean hasReachedBoundary() {
+        return mHasReachedBoundary;
     }
 }

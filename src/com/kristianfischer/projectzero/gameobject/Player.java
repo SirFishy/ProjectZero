@@ -15,9 +15,6 @@ import java.awt.*;
  */
 public class Player extends GameObject {
 
-    public final static int RENDER_HEIGHT = 32;
-    public final static int RENDER_WIDTH = 32;
-
     private boolean mPlayerFired;
     private double mFireDelayTime;
     private double mFireTimer;
@@ -52,7 +49,7 @@ public class Player extends GameObject {
     @Override
     public void render(Graphics g) {
         g.setColor(Color.white);
-        g.fillRect(xPosition, yPosition, RENDER_WIDTH, RENDER_HEIGHT);
+        g.fillRect(xPosition, yPosition, width, height);
     }
 
     public void fire() {
@@ -66,8 +63,10 @@ public class Player extends GameObject {
     private void performFire() {
         if( mFireTimer == mFireDelayTime && mPlayerFired ) {
             Laser projectile = new Laser.Builder()
-                    .xPosition(xPosition + RENDER_WIDTH /2)
-                    .yPosition(yPosition + RENDER_HEIGHT /2)
+                    .xPosition(xPosition + width /2)
+                    .yPosition(yPosition + height /2)
+                    .width(5)
+                    .height(10)
                     .gameId(GameId.PLAYER_PROJECTILE)
                     .speed(5)
                     .isActive(true)
@@ -75,8 +74,7 @@ public class Player extends GameObject {
                     .movementComponent(new MovementGameComponent())
                     .build();
             projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
-                    .rectangle(new Rectangle(projectile.getxPosition(),
-                    projectile.getyPosition(), Laser.RENDER_WIDTH, Laser.RENDER_HEIGHT))
+                    .rectangle(0, 0, projectile.getWidth(), projectile.getHeight())
                     .build());
             DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
             mFireTimer = 0;

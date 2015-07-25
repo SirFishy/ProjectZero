@@ -42,4 +42,8 @@ public class SpaceGrunt extends GameObject {
         g.setColor(Color.white);
         g.fillRect(xPosition, yPosition, width, height);
     }
+
+    public Behavior getBehavior() {
+        return behavior;
+    }
 }

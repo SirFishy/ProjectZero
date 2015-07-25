@@ -12,21 +12,19 @@ import java.util.List;
  */
 public class Hitbox {
     protected GameObject gameObject;
-    protected List<Rectangle> hitboxShapes;
-    protected boolean isCollisionDetected;
+    protected List<HitboxParameters> hitboxShapes;
 
     public static class Builder {
-        private List<Rectangle> hitboxShapes = new ArrayList<>();
+        private List<HitboxParameters> hitboxShapes = new ArrayList<>();
         private GameObject gameObject;
-        private boolean isCollisionDetected;
+
 
         public Builder(GameObject object ) {
             gameObject = object;
-            isCollisionDetected = false;
         }
 
-        public Builder rectangle( Rectangle rectangle ) {
-            hitboxShapes.add(rectangle);
+        public Builder rectangle( int xOffset, int yOffset, int width, int height ) {
+            hitboxShapes.add(new HitboxParameters(xOffset, yOffset, width, height));
             return this;
         }
 
@@ -36,30 +34,36 @@ public class Hitbox {
     }
 
     public void udpate() {
-        for ( Rectangle rectangle : hitboxShapes ) {
-            rectangle.setLocation( (int) rectangle.getX() + gameObject.getxVelocity(),
-                    (int) rectangle.getY() + gameObject.getyVelocity() );
-            //System.out.println("Hitbox location: " + rectangle.getX() + ", " + rectangle.getY());
-            //System.out.println("Object location: " + gameObject.getxPosition() + ", " + gameObject.getyPosition() );
-        }
+        //System.out.println("Hitbox location: " + rectangle.getX() + ", " + rectangle.getY());
+        //System.out.println("Object location: " + gameObject.getxPosition() + ", " + gameObject.getyPosition() );
     }
 
     public Hitbox(Builder builder) {
         this.hitboxShapes = builder.hitboxShapes;
         this.gameObject = builder.gameObject;
-        this.isCollisionDetected = builder.isCollisionDetected;
     }
 
-    public boolean detectCollision(GameObject object) throws IllegalStateException {
-        if( object.getCollisionComponent() == null ) throw new IllegalStateException("GameObject does not have collision component");
-        if( object.getCollisionComponent().getHitbox() == null ) throw new IllegalStateException("GameObject does not have hitbox");
-        Hitbox hitbox = object.getCollisionComponent().getHitbox();
-        for( Rectangle myRectangle : hitboxShapes) {
-            for( Rectangle otherRectangle : hitbox.hitboxShapes) {
-                if( myRectangle.intersects( otherRectangle) )
-                    return true;
+    public boolean detectCollision(GameObject otherObject) throws IllegalStateException {
+        if( otherObject.getCollisionComponent() == null ) throw new IllegalStateException("GameObject does not have collision component");
+        if( otherObject.getCollisionComponent().getHitbox() == null ) throw new IllegalStateException("GameObject does not have hitbox");
+        Hitbox otherHitbox = otherObject.getCollisionComponent().getHitbox();
+        for( HitboxParameters myParameters : hitboxShapes) {
+            for( HitboxParameters otherParameters : otherHitbox.hitboxShapes) {
+                Rectangle myRectangle = createRectangle(gameObject.getxPosition(),
+                        gameObject.getyPosition(), myParameters);
+                Rectangle otherRectangle = createRectangle(otherObject.getxPosition(),
+                        otherObject.getyPosition(), otherParameters);
+                if( myRectangle.intersects(otherRectangle)) return true;
             }
         }
         return false;
+    }
+
+    private Rectangle createRectangle( int xPos, int yPos, HitboxParameters parameters ) {
+        return new Rectangle(
+                parameters.getxOffset() + xPos,
+                parameters.getyOffset() + yPos,
+                parameters.getWidth(),
+                parameters.getHeight());
     }
 }

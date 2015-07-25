@@ -1,5 +1,6 @@
 package com.kristianfischer.projectzero.component;
 
+import com.kristianfischer.projectzero.game.Game;
 import com.kristianfischer.projectzero.gameobject.GameObject;
 
 /**
@@ -37,8 +38,15 @@ public class MovementGameComponent extends GameComponent {
 
     @Override
     public void update( ) {
-        mGameObject.setxPosition( mGameObject.getxPosition() + mGameObject.getxVelocity() );
-        mGameObject.setyPosition( mGameObject.getyPosition() + mGameObject.getyVelocity() );
+        mGameObject.setxPosition(
+                Game.clamp(mGameObject.getxPosition() + mGameObject.getxVelocity(),
+                        0,
+                        Game.WIDTH - mGameObject.getWidth()));
+        mGameObject.setyPosition(
+                Game.clamp(mGameObject.getyPosition() + mGameObject.getyVelocity(),
+                        0,
+                        Game.HEIGHT - mGameObject.getHeight() ));
+
     }
 
     public void move(MovementDirection direction) {

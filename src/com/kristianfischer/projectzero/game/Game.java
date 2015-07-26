@@ -13,6 +13,7 @@ import com.kristianfischer.projectzero.handler.CollisionHandler;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 import com.kristianfischer.projectzero.handler.GameHandler;
 import com.kristianfischer.projectzero.handler.HiveHandler;
+import com.kristianfischer.projectzero.level.LevelOne;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -23,7 +24,7 @@ import java.awt.image.BufferStrategy;
  */
 public class Game extends Canvas implements Runnable{
 
-    public static final int WIDTH = 800;
+    public static final int WIDTH = 1280;
     public static final int ACTUAL_HEIGHT = WIDTH / 16 * 9;
     public static final int HEIGHT_PADDING = 25;
     public static final int HEIGHT = ACTUAL_HEIGHT - HEIGHT_PADDING;
@@ -37,43 +38,15 @@ public class Game extends Canvas implements Runnable{
     public Game() {
         mGameHandler = GameHandler.getInstance();
         mKeyMapper = new KeyMapper();
-        mKeyMapper.setKeyMapping(KeyEvent.VK_W, new MoveUpCommand());
+        //mKeyMapper.setKeyMapping(KeyEvent.VK_W, new MoveUpCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_A, new MoveLeftCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_D, new MoveRightCommand());
-        mKeyMapper.setKeyMapping(KeyEvent.VK_S, new MoveDownCommand());
+        //mKeyMapper.setKeyMapping(KeyEvent.VK_S, new MoveDownCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
         this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
         new GameWindow(WIDTH, ACTUAL_HEIGHT, "Space Invaders Clone!", this);
-        Player player = new Player.Builder()
-                .xPosition(100)
-                .yPosition(100)
-                .width(32)
-                .height(32)
-                .gameId(GameId.PLAYER)
-                .speed(5)
-                .isActive(true)
-                .movementComponent(new MovementGameComponent())
-                .collisionComponent(new CollisionGameComponent())
-                .build();
-        player.getCollisionComponent().setHitbox(new Hitbox.Builder(player)
-                .rectangle(0, 0, player.getWidth(), player.getHeight())
-                .build());
-        SpaceGrunt grunt = new SpaceGrunt.Builder()
-                .xPosition(10)
-                .yPosition(10)
-                .width(32)
-                .height(32)
-                .gameId(GameId.ENEMY)
-                .speed(5)
-                .isActive(true)
-                .movementComponent(new MovementGameComponent())
-                .collisionComponent(new CollisionGameComponent())
-                .build();
-        grunt.getCollisionComponent().setHitbox(new Hitbox.Builder(grunt)
-                .rectangle(0, 0, grunt.getWidth(), grunt.getHeight())
-                .build());
-        mGameHandler.addGameObject(player);
-        mGameHandler.addGameObject(grunt);
+        LevelOne levelOne = new LevelOne(mGameHandler);
+        levelOne.build();
     }
 
     public synchronized void start() {

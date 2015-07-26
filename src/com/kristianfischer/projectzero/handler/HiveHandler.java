@@ -15,7 +15,7 @@ public class HiveHandler {
     private HiveHandler( ) {
         underlingList = new ArrayList<>();
         mPrepareDescent = false;
-        mMaxProjectiles = 2;
+        mMaxProjectiles = 8;
         mRandom = new Random();
     }
     private boolean mPrepareDescent;

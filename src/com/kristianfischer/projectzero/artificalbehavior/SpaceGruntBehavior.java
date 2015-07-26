@@ -64,8 +64,10 @@ public class SpaceGruntBehavior extends Behavior implements IHiveUnderling{
             gameObject.setSpeed( gruntSpeed );
             if( mPreviousHorizontalDirection.equals(MovementGameComponent.MovementDirection.LEFT) ) {
                 moveRight.execute(gameObject);
+                mPreviousHorizontalDirection = MovementGameComponent.MovementDirection.RIGHT;
             } else {
                 moveLeft.execute(gameObject);
+                mPreviousHorizontalDirection = MovementGameComponent.MovementDirection.LEFT;
             }
         }
 
@@ -104,7 +106,7 @@ public class SpaceGruntBehavior extends Behavior implements IHiveUnderling{
         projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
                 .rectangle(0, 0, projectile.getWidth(), projectile.getHeight())
                 .build());
-        projectile.setyVelocity( projectile.getSpeed() );
+        projectile.setyVelocity(projectile.getSpeed());
         DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
     }
 

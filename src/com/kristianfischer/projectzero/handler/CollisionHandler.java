@@ -41,6 +41,7 @@ public class CollisionHandler {
                     if( enemy.getCollisionComponent().getHitbox().detectCollision(projectile) ) {
                         System.out.println("Enemy collided with player projectile");
                         enemy.setIsDestroyed(true);
+                        projectile.setIsActive(false);
                         projectile.setIsDestroyed(true);
                     }
                 }

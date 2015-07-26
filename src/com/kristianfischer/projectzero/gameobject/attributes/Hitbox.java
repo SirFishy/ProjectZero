@@ -46,6 +46,7 @@ public class Hitbox {
     public boolean detectCollision(GameObject otherObject) throws IllegalStateException {
         if( otherObject.getCollisionComponent() == null ) throw new IllegalStateException("GameObject does not have collision component");
         if( otherObject.getCollisionComponent().getHitbox() == null ) throw new IllegalStateException("GameObject does not have hitbox");
+        if( !otherObject.isActive() || otherObject.isDestroyed() ) return false;
         Hitbox otherHitbox = otherObject.getCollisionComponent().getHitbox();
         for( HitboxParameters myParameters : hitboxShapes) {
             for( HitboxParameters otherParameters : otherHitbox.hitboxShapes) {

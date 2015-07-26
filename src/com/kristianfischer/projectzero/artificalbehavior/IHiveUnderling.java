@@ -7,5 +7,6 @@ import com.kristianfischer.projectzero.gameobject.GameObject;
  */
 public interface IHiveUnderling {
     public void prepareDescent();
+    public void fireProjectile();
     public boolean hasReachedBoundary();
 }

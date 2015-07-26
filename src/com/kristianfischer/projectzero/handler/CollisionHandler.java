@@ -40,6 +40,8 @@ public class CollisionHandler {
                 if( projectile.getGameId().equals(GameId.PLAYER_PROJECTILE)) {
                     if( enemy.getCollisionComponent().getHitbox().detectCollision(projectile) ) {
                         System.out.println("Enemy collided with player projectile");
+                        enemy.setIsDestroyed(true);
+                        projectile.setIsDestroyed(true);
                     }
                 }
             }

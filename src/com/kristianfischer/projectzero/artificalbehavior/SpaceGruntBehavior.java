@@ -1,10 +1,13 @@
 package com.kristianfischer.projectzero.artificalbehavior;
 
 import com.kristianfischer.projectzero.command.*;
+import com.kristianfischer.projectzero.component.CollisionGameComponent;
 import com.kristianfischer.projectzero.component.MovementGameComponent;
 import com.kristianfischer.projectzero.game.Game;
 import com.kristianfischer.projectzero.game.GameId;
 import com.kristianfischer.projectzero.gameobject.GameObject;
+import com.kristianfischer.projectzero.gameobject.Laser;
+import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 import com.kristianfischer.projectzero.handler.HiveHandler;
 
@@ -36,6 +39,12 @@ public class SpaceGruntBehavior extends Behavior implements IHiveUnderling{
 
     public void update() {
 
+        if( gameObject.isDestroyed() ) {
+            hiveHandler.unregisterUnderling(this);
+            DynamicGameObjectHandler.getInstance().addDestroyedGameObject(gameObject);
+            return;
+        }
+
         boolean passedRightBoundary = gameObject.getxVelocity() > 0 &&
                 gameObject.getxPosition() > (Game.WIDTH - (10 + gameObject.getWidth()));
         boolean passedLeftBoundary = gameObject.getxVelocity() < 0 &&
@@ -60,13 +69,8 @@ public class SpaceGruntBehavior extends Behavior implements IHiveUnderling{
             }
         }
 
-        if( gameObject.isDestroyed() ) {
-            hiveHandler.unregisterUnderling(this);
-        }
-
         if( reachedGameOverLine ) {
             hiveHandler.unregisterUnderling(this);
-            gameObject.setIsActive(false);
             gameObject.setIsDestroyed(true);
             DynamicGameObjectHandler.getInstance().addDestroyedGameObject(gameObject);
         }
@@ -82,6 +86,26 @@ public class SpaceGruntBehavior extends Behavior implements IHiveUnderling{
         }
         moveDown.execute(gameObject);
         mHasReachedBoundary = false;
+    }
+
+    @Override
+    public void fireProjectile() {
+        Laser projectile = new Laser.Builder()
+                .xPosition(gameObject.getxPosition() + gameObject.getWidth() / 2)
+                .yPosition(gameObject.getyPosition() + gameObject.getHeight())
+                .width(5)
+                .height(10)
+                .gameId(GameId.ENEMY_PROJECTILE)
+                .speed(5)
+                .isActive(true)
+                .collisionComponent(new CollisionGameComponent())
+                .movementComponent(new MovementGameComponent())
+                .build();
+        projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
+                .rectangle(0, 0, projectile.getWidth(), projectile.getHeight())
+                .build());
+        projectile.setyVelocity( projectile.getSpeed() );
+        DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
     }
 
     @Override

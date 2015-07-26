@@ -4,6 +4,7 @@ import com.kristianfischer.projectzero.artificalbehavior.IHiveUnderling;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by kristianhfischer on 7/22/15.
@@ -14,15 +15,31 @@ public class HiveHandler {
     private HiveHandler( ) {
         underlingList = new ArrayList<>();
         mPrepareDescent = false;
+        mMaxProjectiles = 2;
+        mRandom = new Random();
     }
     private boolean mPrepareDescent;
+    private int mMaxProjectiles;
     private List<IHiveUnderling> underlingList;
+    private Random mRandom;
 
     public void updateHiveCommands( ) {
+        int currentProjectiles = GameHandler.getInstance().getNumberOfEnemyProjectiles();
         for( IHiveUnderling underling : underlingList ) {
-            if( underling.hasReachedBoundary() ) {
+
+            if( underling.hasReachedBoundary() && !mPrepareDescent ) {
                 mPrepareDescent = true;
-                break;
+            }
+
+            if( currentProjectiles < mMaxProjectiles ) {
+                float chanceToFire = mRandom.nextFloat();
+                //60 updates per second
+                //Want to average a 33% chance to shoot every second
+                //Therefore, chance is 1/(60 frames * 3 seconds)
+                if( chanceToFire <= (1.0f/(60.0f * 3.0f) ) ) {
+                    underling.fireProjectile();
+                    currentProjectiles++;
+                }
             }
         }
 

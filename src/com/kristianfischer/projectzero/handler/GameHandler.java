@@ -19,6 +19,8 @@ public class GameHandler  {
     private ConcurrentLinkedQueue<GameObject> players;
     private ConcurrentLinkedQueue<GameObject> enemies;
     private ConcurrentLinkedQueue<GameObject> projectiles;
+    private int mNumberOfPlayerProjectiles;
+    private int mNumberOfEnemyProjectiles;
     private GameHandler() {
         gameObjects = new ConcurrentLinkedQueue<>();
         players = new ConcurrentLinkedQueue<>();
@@ -55,10 +57,15 @@ public class GameHandler  {
             System.out.println("Added SpaceGrunt");
             enemies.add(gameObject);
         }
-        if( gameObject.getGameId().equals(GameId.PLAYER_PROJECTILE) ||
-                gameObject.getGameId().equals(GameId.ENEMY_PROJECTILE)) {
-            System.out.println("Added Projectile");
+        if( gameObject.getGameId().equals(GameId.PLAYER_PROJECTILE)) {
+            System.out.println("Added Player Projectile");
             projectiles.add(gameObject);
+            mNumberOfPlayerProjectiles++;
+        }
+        if(gameObject.getGameId().equals(GameId.ENEMY_PROJECTILE)) {
+            System.out.println("Added Enemy Projectile");
+            projectiles.add(gameObject);
+            mNumberOfEnemyProjectiles++;
         }
     }
 
@@ -70,8 +77,12 @@ public class GameHandler  {
         if( gameObject.getGameId().equals( GameId.ENEMY )) {
             enemies.remove(gameObject);
         }
-        if( gameObject.getGameId().equals(GameId.PLAYER_PROJECTILE) ||
-                gameObject.getGameId().equals(GameId.ENEMY_PROJECTILE)) {
+        if( gameObject.getGameId().equals(GameId.PLAYER_PROJECTILE) ) {
+            mNumberOfPlayerProjectiles--;
+            projectiles.remove(gameObject);
+        }
+        if( gameObject.getGameId().equals(GameId.ENEMY_PROJECTILE) ) {
+            mNumberOfEnemyProjectiles--;
             projectiles.remove(gameObject);
         }
     }
@@ -82,4 +93,13 @@ public class GameHandler  {
     public Iterator<GameObject> getPlayerIterator() { return players.iterator(); }
     public Iterator<GameObject> getEnemyIterator() { return enemies.iterator(); }
     public Iterator<GameObject> getProjectileIterator() { return projectiles.iterator(); }
+
+    public int getNumberOfPlayerProjectiles() {
+        return mNumberOfPlayerProjectiles;
+    }
+
+    public int getNumberOfEnemyProjectiles() {
+        return mNumberOfEnemyProjectiles;
+    }
+
 }

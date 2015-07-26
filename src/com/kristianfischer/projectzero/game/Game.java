@@ -29,8 +29,6 @@ public class Game extends Canvas implements Runnable{
     public static final int HEIGHT = ACTUAL_HEIGHT - HEIGHT_PADDING;
     public static final double NUMBER_OF_TICKS = 60;
 
-    private int debugInt = 0;
-
     private boolean mRunning = false;
     private Thread mGameThread;
     private GameHandler mGameHandler;
@@ -147,29 +145,6 @@ public class Game extends Canvas implements Runnable{
         handleTheHive();
     }
     private void spawnNewObjects() {
-        if( debugInt % 200 == 0) {
-            Laser projectile = new Laser.Builder()
-                    .xPosition(WIDTH / 2)
-                    .yPosition(1)
-                    .width(5)
-                    .height(10)
-                    .gameId(GameId.ENEMY_PROJECTILE)
-                    .speed(5)
-                    .isActive(true)
-                    .collisionComponent(new CollisionGameComponent())
-                    .movementComponent(new MovementGameComponent())
-                    .build();
-            projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
-                    .rectangle(0, 0, projectile.getWidth(), projectile.getHeight())
-                    .build());
-            projectile.setyVelocity( projectile.getSpeed() );
-            DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
-        }
-        //System.out.println(debugInt);
-        debugInt++;
-        if( debugInt == Integer.MAX_VALUE) {
-            debugInt = 0;
-        }
         while( DynamicGameObjectHandler.getInstance().hasNextNewGameObject() ) {
             mGameHandler.addGameObject( DynamicGameObjectHandler.getInstance().getNextNewGameObject() );
         }

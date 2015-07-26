@@ -20,14 +20,20 @@ public class EnemyProjectileBehavior extends Behavior{
             throw new IllegalStateException("GameObject is not an enemy projectile");
         moveDown = new MoveDownCommand();
         moveDown.execute(this.gameObject);
-
     }
 
     public void update() {
+
+        if( gameObject.isDestroyed() ) {
+            DynamicGameObjectHandler.getInstance().addDestroyedGameObject(gameObject);
+            return;
+        }
+
         boolean reachedLevelBoundary = gameObject.getyPosition() <= 0 ||
                 gameObject.getyPosition() >= (Game.HEIGHT - gameObject.getHeight());
         if(reachedLevelBoundary ) {
             gameObject.setIsDestroyed(true);
+            System.out.println("Destroying Enemy Projectile");
             DynamicGameObjectHandler.getInstance().addDestroyedGameObject(gameObject);
         }
     }

@@ -12,16 +12,22 @@ import com.kristianfischer.projectzero.gameobject.SpaceGrunt;
 import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 import com.kristianfischer.projectzero.handler.GameHandler;
 import com.kristianfischer.projectzero.spawner.BunkerSpawner;
+import com.kristianfischer.projectzero.spawner.GruntSpawner;
+import com.kristianfischer.projectzero.spawner.PlayerSpawner;
 
 /**
  * Created by kristianhfischer on 7/25/15.
  */
 public class LevelOne {
 
-    private static final int X_OFFSET = 169;
+
+    private static final int NUMBER_OF_ROWS = 4;
+    private static final int ENEMIES_PER_ROW = 8;
+    private static final int NUMBER_OF_BUNKERS = 3;
+    private static final int GRUNT_SPACING = 20;
+    private static final int BUNKER_SPACING = BunkerSpawner.BUNKER_WIDTH * 2;
+    private static final int X_OFFSET = (Game.WIDTH - 60) - ( BUNKER_SPACING * NUMBER_OF_BUNKERS )  ;
     private static final int Y_OFFSET = 10;
-    private static final int NUMBER_OF_ROWS = 3;
-    private static final int ENEMIES_PER_ROW = 11;
 
     private GameHandler mGameHandler;
 
@@ -30,45 +36,25 @@ public class LevelOne {
     }
 
     public void build() {
-        GameObject player = new Player.Builder()
-                .xPosition(Game.WIDTH / 2 - 16)
-                .yPosition(Game.HEIGHT - 42)
-                .width(32)
-                .height(32)
-                .gameId(GameId.PLAYER)
-                .speed(5)
-                .isActive(true)
-                .movementComponent(new MovementGameComponent())
-                .collisionComponent(new CollisionGameComponent())
-                .build();
-        player.getCollisionComponent().setHitbox(new Hitbox.Builder(player)
-                .rectangle(0, 0, player.getWidth(), player.getHeight())
-                .build());
+        Player player = PlayerSpawner.SpawnPlayer(Game.WIDTH / 2 - PlayerSpawner.PLAYER_WIDTH,
+                Game.HEIGHT - PlayerSpawner.PLAYER_HEIGHT - 10);
         mGameHandler.addGameObject(player);
-        GameObject bunker = BunkerSpawner.SpawnBunker(X_OFFSET,
-                Game.HEIGHT - 42 - BunkerSpawner.BUNKER_HEIGHT - 10);
-        mGameHandler.addGameObject(bunker);
+        for( int bunk = 0; bunk < NUMBER_OF_BUNKERS; bunk ++) {
+            GameObject bunker = BunkerSpawner.SpawnBunker(X_OFFSET + bunk * BUNKER_SPACING,
+                    Game.HEIGHT - 42 - BunkerSpawner.BUNKER_HEIGHT - 10);
+            mGameHandler.addGameObject(bunker);
+        }
+
         for( int row = 0; row < NUMBER_OF_ROWS; row++) {
-            generateEnemyRow(X_OFFSET, Y_OFFSET + 42 * row, ENEMIES_PER_ROW);
+            generateEnemyRow(X_OFFSET, Y_OFFSET + 26 * row, ENEMIES_PER_ROW);
         }
     }
 
     private void generateEnemyRow(int startingX, int startingY, int numberOfEnemies) {
         for( int enemyCount = 0; enemyCount < numberOfEnemies; enemyCount ++) {
-            GameObject grunt = new SpaceGrunt.Builder()
-                    .xPosition(startingX + 42 * enemyCount )
-                    .yPosition(startingY)
-                    .width(32)
-                    .height(32)
-                    .gameId(GameId.ENEMY)
-                    .speed(2)
-                    .isActive(true)
-                    .movementComponent(new MovementGameComponent())
-                    .collisionComponent(new CollisionGameComponent())
-                    .build();
-            grunt.getCollisionComponent().setHitbox(new Hitbox.Builder(grunt)
-                    .rectangle(0, 0, grunt.getWidth(), grunt.getHeight())
-                    .build());
+            SpaceGrunt grunt = GruntSpawner.SpawnGrunt(startingX +
+                            (GruntSpawner.GRUNT_WIDTH + GRUNT_SPACING) * enemyCount,
+                    startingY);
             mGameHandler.addGameObject(grunt);
         }
 

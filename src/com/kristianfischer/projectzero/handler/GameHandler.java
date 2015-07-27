@@ -52,25 +52,25 @@ public class GameHandler  {
     public void addGameObject( GameObject gameObject ) {
         gameObjects.add(gameObject);
         if( gameObject.getGameId().equals( GameId.PLAYER )) {
-            System.out.println("Added Player");
+            //System.out.println("Added Player");
             players.add(gameObject);
         }
         if( gameObject.getGameId().equals( GameId.ENEMY )) {
-            System.out.println("Added SpaceGrunt");
+            //System.out.println("Added SpaceGrunt");
             enemies.add(gameObject);
         }
         if( gameObject.getGameId().equals(GameId.PLAYER_PROJECTILE)) {
-            System.out.println("Added Player Projectile");
+            //System.out.println("Added Player Projectile");
             projectiles.add(gameObject);
             mNumberOfPlayerProjectiles++;
         }
         if(gameObject.getGameId().equals(GameId.ENEMY_PROJECTILE)) {
-            System.out.println("Added Enemy Projectile");
+            //System.out.println("Added Enemy Projectile");
             projectiles.add(gameObject);
             mNumberOfEnemyProjectiles++;
         }
         if( gameObject.getGameId().equals(GameId.BUNKER) ) {
-            System.out.println("Added Bunker");
+            //System.out.println("Added Bunker");
             bunkers.add(gameObject);
         }
     }

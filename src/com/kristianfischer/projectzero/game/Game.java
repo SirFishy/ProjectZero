@@ -1,14 +1,10 @@
 package com.kristianfischer.projectzero.game;
 
-import com.kristianfischer.projectzero.command.*;
-import com.kristianfischer.projectzero.component.CollisionGameComponent;
-import com.kristianfischer.projectzero.component.MovementGameComponent;
+import com.kristianfischer.projectzero.command.FireCommand;
+import com.kristianfischer.projectzero.command.MoveLeftCommand;
+import com.kristianfischer.projectzero.command.MoveRightCommand;
 import com.kristianfischer.projectzero.gameinput.KeyInput;
 import com.kristianfischer.projectzero.gameinput.KeyMapper;
-import com.kristianfischer.projectzero.gameobject.Laser;
-import com.kristianfischer.projectzero.gameobject.Player;
-import com.kristianfischer.projectzero.gameobject.SpaceGrunt;
-import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 import com.kristianfischer.projectzero.handler.CollisionHandler;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 import com.kristianfischer.projectzero.handler.GameHandler;
@@ -24,8 +20,8 @@ import java.awt.image.BufferStrategy;
  */
 public class Game extends Canvas implements Runnable{
 
-    public static final int WIDTH = 1280;
-    public static final int ACTUAL_HEIGHT = WIDTH / 16 * 9;
+    public static final int WIDTH = 800;
+    public static final int ACTUAL_HEIGHT = WIDTH /16 * 9;
     public static final int HEIGHT_PADDING = 25;
     public static final int HEIGHT = ACTUAL_HEIGHT - HEIGHT_PADDING;
     public static final double NUMBER_OF_TICKS = 60;
@@ -129,8 +125,10 @@ public class Game extends Canvas implements Runnable{
             mGameHandler.removeGameObject(DynamicGameObjectHandler.getInstance().getNextDestroyedGameObject());
         }
     }
-    private void detectCollisions() { CollisionHandler.getInstance().handleCollisions(mGameHandler); }
-    private void handleTheHive() { HiveHandler.getInstance().updateHiveCommands(); }
+    private void detectCollisions() { CollisionHandler.getInstance().handleCollisions(mGameHandler);
+     }
+    private void handleTheHive() { HiveHandler.getInstance().updateHiveCommands();
+     }
 
     private void render() {
         BufferStrategy bufferStrategy = this.getBufferStrategy();

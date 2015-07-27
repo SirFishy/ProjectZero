@@ -3,12 +3,9 @@ package com.kristianfischer.projectzero.gameobject;
 import com.kristianfischer.projectzero.handler.ComponentHandler;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 import com.kristianfischer.projectzero.handler.GameHandler;
-import com.kristianfischer.projectzero.spawner.BunkerSpawner;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 

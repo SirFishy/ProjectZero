@@ -10,6 +10,7 @@ import com.kristianfischer.projectzero.gameobject.Laser;
 import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 import com.kristianfischer.projectzero.handler.HiveHandler;
+import com.kristianfischer.projectzero.spawner.LaserSpawner;
 
 /**
  * Created by kristianhfischer on 7/20/15.
@@ -92,22 +93,10 @@ public class SpaceGruntBehavior extends Behavior implements IHiveUnderling{
 
     @Override
     public void fireProjectile() {
-        Laser projectile = new Laser.Builder()
-                .xPosition(gameObject.getxPosition() + gameObject.getWidth() / 2)
-                .yPosition(gameObject.getyPosition() + gameObject.getHeight())
-                .width(5)
-                .height(10)
-                .gameId(GameId.ENEMY_PROJECTILE)
-                .speed(5)
-                .isActive(true)
-                .collisionComponent(new CollisionGameComponent())
-                .movementComponent(new MovementGameComponent())
-                .build();
-        projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
-                .rectangle(0, 0, projectile.getWidth(), projectile.getHeight())
-                .build());
-        projectile.setyVelocity(projectile.getSpeed());
-        DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
+
+        Laser laser = LaserSpawner.SpawnLaser(gameObject.getxPosition() + gameObject.getWidth() / 2,
+                gameObject.getyPosition() + gameObject.getHeight(), GameId.ENEMY_PROJECTILE);
+        DynamicGameObjectHandler.getInstance().addNewGameObject(laser);
     }
 
     @Override

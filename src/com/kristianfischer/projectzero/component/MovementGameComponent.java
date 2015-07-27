@@ -52,24 +52,24 @@ public class MovementGameComponent extends GameComponent {
     public void move(MovementDirection direction) {
         switch(direction) {
             case UP:
+                mNumVerticalButtonsPressed ++;
                 mGameObject.setyVelocity( -1 * mGameObject.getSpeed() );
                 verticalState = MovementDirection.UP;
-                mNumVerticalButtonsPressed ++;
                 break;
             case DOWN:
+                mNumVerticalButtonsPressed ++;
                 mGameObject.setyVelocity(mGameObject.getSpeed());
                 verticalState = MovementDirection.DOWN;
-                mNumVerticalButtonsPressed ++;
                 break;
             case LEFT:
+                mNumHorizontalButtonsPressed++;
                 mGameObject.setxVelocity(-1 * mGameObject.getSpeed());
                 horizontalState = MovementDirection.LEFT;
-                mNumHorizontalButtonsPressed++;
                 break;
             case RIGHT:
+                mNumHorizontalButtonsPressed++;
                 mGameObject.setxVelocity(mGameObject.getSpeed());
                 horizontalState = MovementDirection.RIGHT;
-                mNumHorizontalButtonsPressed++;
                 break;
             case NONE:
                 break;

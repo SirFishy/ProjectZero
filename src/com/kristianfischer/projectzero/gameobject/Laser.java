@@ -14,7 +14,7 @@ import java.awt.*;
 public class Laser extends GameObject implements IWeapon {
 
     private Behavior behavior;
-    private int mDamage = 1;
+    private int mDamage;
 
     @Override
     public void applyDamage(IDamageable damageable) {
@@ -22,9 +22,15 @@ public class Laser extends GameObject implements IWeapon {
     }
 
     public static class Builder extends AbstractBuilder<Builder> {
+        private int mDamage = 0;
 
         @Override
         protected Builder self() {
+            return this;
+        }
+
+        public Builder damage(int damage) {
+            mDamage = damage;
             return this;
         }
 
@@ -35,6 +41,7 @@ public class Laser extends GameObject implements IWeapon {
 
     public Laser(Builder builder) {
         super(builder);
+        this.mDamage = builder.mDamage;
         ComponentHandler.getInstance().initialize(this);
         if( gameId.equals(GameId.PLAYER_PROJECTILE) )
             behavior = new PlayerProjectileBehavior(this);
@@ -53,5 +60,13 @@ public class Laser extends GameObject implements IWeapon {
         g.setColor(Color.white);
         g.fillRect(xPosition, yPosition, width, height);
         collisionComponent.getHitbox().render(g);
+    }
+
+    public int getDamage() {
+        return mDamage;
+    }
+
+    public void setDamage(int mDamage) {
+        this.mDamage = mDamage;
     }
 }

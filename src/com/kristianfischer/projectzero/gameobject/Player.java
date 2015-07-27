@@ -7,6 +7,7 @@ import com.kristianfischer.projectzero.game.GameId;
 import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 import com.kristianfischer.projectzero.handler.ComponentHandler;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
+import com.kristianfischer.projectzero.spawner.LaserSpawner;
 
 import java.awt.*;
 
@@ -62,21 +63,9 @@ public class Player extends GameObject {
 
     private void performFire() {
         if( mFireTimer == mFireDelayTime && mPlayerFired ) {
-            Laser projectile = new Laser.Builder()
-                    .xPosition(xPosition + width /2)
-                    .yPosition(yPosition + height /2)
-                    .width(5)
-                    .height(10)
-                    .gameId(GameId.PLAYER_PROJECTILE)
-                    .speed(5)
-                    .isActive(true)
-                    .collisionComponent(new CollisionGameComponent())
-                    .movementComponent(new MovementGameComponent())
-                    .build();
-            projectile.getCollisionComponent().setHitbox(new Hitbox.Builder(projectile)
-                    .rectangle(0, 0, projectile.getWidth(), projectile.getHeight())
-                    .build());
-            DynamicGameObjectHandler.getInstance().addNewGameObject(projectile);
+            Laser laser = LaserSpawner.SpawnLaser(xPosition + width /2,
+                    yPosition + height / 2, GameId.PLAYER_PROJECTILE);
+            DynamicGameObjectHandler.getInstance().addNewGameObject(laser);
             mFireTimer = 0;
         }
         if( mFireTimer < mFireDelayTime ) {

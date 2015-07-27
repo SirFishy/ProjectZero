@@ -33,7 +33,7 @@ public class EnemyProjectileBehavior extends Behavior{
                 gameObject.getyPosition() >= (Game.HEIGHT - gameObject.getHeight());
         if(reachedLevelBoundary ) {
             gameObject.setIsDestroyed(true);
-            System.out.println("Destroying Enemy Projectile");
+            //System.out.println("Destroying Enemy Projectile");
             DynamicGameObjectHandler.getInstance().addDestroyedGameObject(gameObject);
         }
     }

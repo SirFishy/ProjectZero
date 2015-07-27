@@ -11,6 +11,7 @@ import java.util.List;
  * TODO: Need to update this to handle polygons, research required
  */
 public class Hitbox {
+    public static boolean DEBUG_HITBOX = true;
     protected GameObject gameObject;
     protected List<HitboxParameters> hitboxShapes;
 
@@ -36,6 +37,19 @@ public class Hitbox {
     public void udpate() {
         //System.out.println("Hitbox location: " + rectangle.getX() + ", " + rectangle.getY());
         //System.out.println("Object location: " + gameObject.getxPosition() + ", " + gameObject.getyPosition() );
+    }
+
+    public void render(Graphics g) {
+        if( DEBUG_HITBOX ) {
+            for( HitboxParameters parameters : hitboxShapes) {
+                g.setColor(Color.blue);
+                g.drawRect(gameObject.getxPosition() + parameters.getxOffset(),
+                        gameObject.getyPosition() + parameters.getyOffset(),
+                        parameters.getWidth(),
+                        parameters.getHeight());
+            }
+
+        }
     }
 
     public Hitbox(Builder builder) {

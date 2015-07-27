@@ -8,5 +8,6 @@ public enum GameId {
     PLAYER_PROJECTILE(),
     ENEMY(),
     ENEMY_PROJECTILE(),
+    BUNKER(),
     NONE()
 }

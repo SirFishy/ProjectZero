@@ -5,11 +5,13 @@ import com.kristianfischer.projectzero.component.MovementGameComponent;
 import com.kristianfischer.projectzero.game.Game;
 import com.kristianfischer.projectzero.game.GameId;
 import com.kristianfischer.projectzero.game.GameWindow;
+import com.kristianfischer.projectzero.gameobject.Bunker;
 import com.kristianfischer.projectzero.gameobject.GameObject;
 import com.kristianfischer.projectzero.gameobject.Player;
 import com.kristianfischer.projectzero.gameobject.SpaceGrunt;
 import com.kristianfischer.projectzero.gameobject.attributes.Hitbox;
 import com.kristianfischer.projectzero.handler.GameHandler;
+import com.kristianfischer.projectzero.spawner.BunkerSpawner;
 
 /**
  * Created by kristianhfischer on 7/25/15.
@@ -28,7 +30,7 @@ public class LevelOne {
     }
 
     public void build() {
-        Player player = new Player.Builder()
+        GameObject player = new Player.Builder()
                 .xPosition(Game.WIDTH / 2 - 16)
                 .yPosition(Game.HEIGHT - 42)
                 .width(32)
@@ -43,6 +45,9 @@ public class LevelOne {
                 .rectangle(0, 0, player.getWidth(), player.getHeight())
                 .build());
         mGameHandler.addGameObject(player);
+        GameObject bunker = BunkerSpawner.SpawnBunker(X_OFFSET,
+                Game.HEIGHT - 42 - BunkerSpawner.BUNKER_HEIGHT - 10);
+        mGameHandler.addGameObject(bunker);
         for( int row = 0; row < NUMBER_OF_ROWS; row++) {
             generateEnemyRow(X_OFFSET, Y_OFFSET + 42 * row, ENEMIES_PER_ROW);
         }
@@ -50,7 +55,7 @@ public class LevelOne {
 
     private void generateEnemyRow(int startingX, int startingY, int numberOfEnemies) {
         for( int enemyCount = 0; enemyCount < numberOfEnemies; enemyCount ++) {
-            SpaceGrunt grunt = new SpaceGrunt.Builder()
+            GameObject grunt = new SpaceGrunt.Builder()
                     .xPosition(startingX + 42 * enemyCount )
                     .yPosition(startingY)
                     .width(32)

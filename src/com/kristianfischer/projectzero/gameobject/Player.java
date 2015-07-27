@@ -18,7 +18,6 @@ public class Player extends GameObject {
     private boolean mPlayerFired;
     private double mFireDelayTime;
     private double mFireTimer;
-    private boolean mIsDead;
 
     public static class Builder extends AbstractBuilder<Builder> {
 
@@ -50,6 +49,7 @@ public class Player extends GameObject {
     public void render(Graphics g) {
         g.setColor(Color.white);
         g.fillRect(xPosition, yPosition, width, height);
+        collisionComponent.getHitbox().render(g);
     }
 
     public void fire() {
@@ -83,14 +83,5 @@ public class Player extends GameObject {
             mFireTimer++;
         }
     }
-
-    public void setIsDead( boolean isDead ) {
-        mIsDead = isDead;
-    }
-
-    public boolean isDead() {
-        return isDead();
-    }
-
 
 }

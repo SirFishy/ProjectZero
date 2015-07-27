@@ -43,10 +43,11 @@ public class Game extends Canvas implements Runnable{
         mKeyMapper.setKeyMapping(KeyEvent.VK_D, new MoveRightCommand());
         //mKeyMapper.setKeyMapping(KeyEvent.VK_S, new MoveDownCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
-        this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
-        new GameWindow(WIDTH, ACTUAL_HEIGHT, "Space Invaders Clone!", this);
         LevelOne levelOne = new LevelOne(mGameHandler);
         levelOne.build();
+        this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
+        new GameWindow(WIDTH, ACTUAL_HEIGHT, "Space Invaders Clone!", this);
+
     }
 
     public synchronized void start() {

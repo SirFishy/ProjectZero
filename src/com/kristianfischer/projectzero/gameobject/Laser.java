@@ -1,21 +1,25 @@
 package com.kristianfischer.projectzero.gameobject;
 
-import com.kristianfischer.projectzero.artificalbehavior.Behavior;
-import com.kristianfischer.projectzero.artificalbehavior.EnemyProjectileBehavior;
-import com.kristianfischer.projectzero.artificalbehavior.PlayerProjectileBehavior;
-import com.kristianfischer.projectzero.game.Game;
+import com.kristianfischer.projectzero.artificalbehavior.*;
 import com.kristianfischer.projectzero.game.GameId;
+import com.kristianfischer.projectzero.gameobject.attributes.IDamageable;
+import com.kristianfischer.projectzero.gameobject.attributes.IWeapon;
 import com.kristianfischer.projectzero.handler.ComponentHandler;
-import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 
 import java.awt.*;
 
 /**
  * Created by kristianhfischer on 7/14/15.
  */
-public class Laser extends GameObject {
+public class Laser extends GameObject implements IWeapon {
 
     private Behavior behavior;
+    private int mDamage = 1;
+
+    @Override
+    public void applyDamage(IDamageable damageable) {
+        damageable.takeDamage(mDamage);
+    }
 
     public static class Builder extends AbstractBuilder<Builder> {
 
@@ -48,5 +52,6 @@ public class Laser extends GameObject {
     public void render(Graphics g) {
         g.setColor(Color.white);
         g.fillRect(xPosition, yPosition, width, height);
+        collisionComponent.getHitbox().render(g);
     }
 }

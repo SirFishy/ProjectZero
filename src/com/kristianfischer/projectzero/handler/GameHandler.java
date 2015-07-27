@@ -19,6 +19,7 @@ public class GameHandler  {
     private ConcurrentLinkedQueue<GameObject> players;
     private ConcurrentLinkedQueue<GameObject> enemies;
     private ConcurrentLinkedQueue<GameObject> projectiles;
+    private ConcurrentLinkedQueue<GameObject> bunkers;
     private int mNumberOfPlayerProjectiles;
     private int mNumberOfEnemyProjectiles;
     private GameHandler() {
@@ -26,6 +27,7 @@ public class GameHandler  {
         players = new ConcurrentLinkedQueue<>();
         enemies = new ConcurrentLinkedQueue<>();
         projectiles = new ConcurrentLinkedQueue<>();
+        bunkers = new ConcurrentLinkedQueue<>();
     }
 
     public static GameHandler getInstance() { return INSTANCE; }
@@ -67,6 +69,10 @@ public class GameHandler  {
             projectiles.add(gameObject);
             mNumberOfEnemyProjectiles++;
         }
+        if( gameObject.getGameId().equals(GameId.BUNKER) ) {
+            System.out.println("Added Bunker");
+            bunkers.add(gameObject);
+        }
     }
 
     public void removeGameObject( GameObject gameObject ) {
@@ -85,6 +91,9 @@ public class GameHandler  {
             mNumberOfEnemyProjectiles--;
             projectiles.remove(gameObject);
         }
+        if( gameObject.getGameId().equals(GameId.BUNKER) ) {
+            bunkers.remove(gameObject);
+        }
     }
 
     public Iterator<GameObject> getGameObjectIterator() {
@@ -93,6 +102,7 @@ public class GameHandler  {
     public Iterator<GameObject> getPlayerIterator() { return players.iterator(); }
     public Iterator<GameObject> getEnemyIterator() { return enemies.iterator(); }
     public Iterator<GameObject> getProjectileIterator() { return projectiles.iterator(); }
+    public Iterator<GameObject> getBunkerIterator() { return bunkers.iterator(); }
 
     public int getNumberOfPlayerProjectiles() {
         return mNumberOfPlayerProjectiles;

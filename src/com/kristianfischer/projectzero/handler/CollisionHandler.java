@@ -5,6 +5,7 @@ import com.kristianfischer.projectzero.gameobject.attributes.IWeapon;
 import com.kristianfischer.projectzero.game.GameId;
 import com.kristianfischer.projectzero.gameobject.GameObject;
 import com.kristianfischer.projectzero.gameobject.Player;
+import com.kristianfischer.projectzero.level.LevelHud;
 
 import java.util.Iterator;
 
@@ -36,6 +37,7 @@ public class CollisionHandler {
                     if( player.getCollisionComponent().getHitbox().detectCollision(projectile) ) {
                         projectile.setIsActive(false);
                         projectile.setIsDestroyed(true);
+                        LevelHud.getInstance().removeLife();
                         //System.out.println("Player collided with enemy projectile");
                     }
                 }
@@ -88,7 +90,7 @@ public class CollisionHandler {
                     }
                     if( bunker.getCollisionComponent().getHitbox().detectCollision(projectile) ) {
                         //System.out.println("Bunker collided with projectile");
-                        ((IWeapon) projectile).applyDamage( (IDamageable) bunker);
+                        ((IWeapon) projectile).applyDamage((IDamageable) bunker);
                         projectile.setIsActive(false);
                         projectile.setIsDestroyed(true);
                     }

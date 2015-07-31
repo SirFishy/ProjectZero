@@ -16,12 +16,14 @@ public class HiveHandler {
         underlingList = new ArrayList<>();
         mPrepareDescent = false;
         mMaxProjectiles = 8;
+        mNumberOfEnemies = 0;
         mRandom = new Random();
     }
     private boolean mPrepareDescent;
     private int mMaxProjectiles;
     private List<IHiveUnderling> underlingList;
     private Random mRandom;
+    private int mNumberOfEnemies;
 
     public void updateHiveCommands( ) {
         int currentProjectiles = GameHandler.getInstance().getNumberOfEnemyProjectiles();
@@ -36,7 +38,7 @@ public class HiveHandler {
                 //60 updates per second
                 //Want to average a 33% chance to shoot every second
                 //Therefore, chance is 1/(60 frames * 3 seconds)
-                if( chanceToFire <= (1.0f/(60.0f * 3.0f) ) ) {
+                if( chanceToFire <= (1.0f/(60.0f * (3.0f + mNumberOfEnemies)) ) ) {
                     underling.fireProjectile();
                     currentProjectiles++;
                 }
@@ -53,10 +55,16 @@ public class HiveHandler {
 
     public void registerUnderling( IHiveUnderling underling ) {
         underlingList.add(underling);
+        mNumberOfEnemies++;
     }
 
     public void unregisterUnderling( IHiveUnderling underling) {
         underlingList.remove(underling);
+        mNumberOfEnemies--;
+    }
+
+    public int getNumberOfEnemies() {
+        return mNumberOfEnemies;
     }
 
 }

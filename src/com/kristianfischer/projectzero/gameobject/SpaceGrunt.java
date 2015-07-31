@@ -3,6 +3,8 @@ package com.kristianfischer.projectzero.gameobject;
 import com.kristianfischer.projectzero.artificalbehavior.Behavior;
 import com.kristianfischer.projectzero.artificalbehavior.SpaceGruntBehavior;
 import com.kristianfischer.projectzero.handler.ComponentHandler;
+import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
+import com.kristianfischer.projectzero.level.LevelHud;
 
 import java.awt.*;
 
@@ -12,11 +14,18 @@ import java.awt.*;
 public class SpaceGrunt extends GameObject {
 
     private Behavior behavior;
+    private int mScore;
 
     public static class Builder extends AbstractBuilder<Builder> {
+        private int mScore = 0;
 
         @Override
         protected Builder self() {
+            return this;
+        }
+
+        public Builder score(int score) {
+            mScore = score;
             return this;
         }
 
@@ -25,14 +34,21 @@ public class SpaceGrunt extends GameObject {
         }
     }
 
-    public SpaceGrunt(AbstractBuilder builder) {
+    public SpaceGrunt(Builder builder) {
         super(builder);
         ComponentHandler.getInstance().initialize(this);
+        mScore = builder.mScore;
         behavior = new SpaceGruntBehavior(this);
     }
 
     @Override
     public void tick() {
+        if( isDestroyed ) {
+            LevelHud.getInstance().addScore(mScore);
+            behavior.update();
+            DynamicGameObjectHandler.getInstance().addDestroyedGameObject(this);
+            return;
+        }
         ComponentHandler.getInstance().update(this);
         behavior.update();
     }

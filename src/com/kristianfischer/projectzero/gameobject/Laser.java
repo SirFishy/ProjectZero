@@ -5,6 +5,7 @@ import com.kristianfischer.projectzero.game.GameId;
 import com.kristianfischer.projectzero.gameobject.attributes.IDamageable;
 import com.kristianfischer.projectzero.gameobject.attributes.IWeapon;
 import com.kristianfischer.projectzero.handler.ComponentHandler;
+import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 
 import java.awt.*;
 
@@ -51,8 +52,13 @@ public class Laser extends GameObject implements IWeapon {
 
     @Override
     public void tick() {
+        if( isDestroyed ) {
+            DynamicGameObjectHandler.getInstance().addDestroyedGameObject(this);
+            return;
+        }
         ComponentHandler.getInstance().update(this);
         behavior.update();
+
     }
 
     @Override

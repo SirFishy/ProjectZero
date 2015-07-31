@@ -9,6 +9,7 @@ import com.kristianfischer.projectzero.handler.CollisionHandler;
 import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
 import com.kristianfischer.projectzero.handler.GameHandler;
 import com.kristianfischer.projectzero.handler.HiveHandler;
+import com.kristianfischer.projectzero.level.LevelHud;
 import com.kristianfischer.projectzero.level.LevelOne;
 
 import java.awt.*;
@@ -30,6 +31,7 @@ public class Game extends Canvas implements Runnable{
     private Thread mGameThread;
     private GameHandler mGameHandler;
     private KeyMapper mKeyMapper;
+    LevelOne mLevelOne;
 
     public Game() {
         mGameHandler = GameHandler.getInstance();
@@ -39,8 +41,8 @@ public class Game extends Canvas implements Runnable{
         mKeyMapper.setKeyMapping(KeyEvent.VK_D, new MoveRightCommand());
         //mKeyMapper.setKeyMapping(KeyEvent.VK_S, new MoveDownCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
-        LevelOne levelOne = new LevelOne(mGameHandler);
-        levelOne.build();
+        mLevelOne = new LevelOne(mGameHandler);
+        mLevelOne.build();
         this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
         new GameWindow(WIDTH, ACTUAL_HEIGHT, "Space Invaders Clone!", this);
 
@@ -140,6 +142,9 @@ public class Game extends Canvas implements Runnable{
         Graphics g = bufferStrategy.getDrawGraphics();
         g.setColor(Color.black);
         g.fillRect(0, 0, WIDTH, ACTUAL_HEIGHT);
+        g.setColor(Color.green);
+        g.fillRect(0, HEIGHT - 10, WIDTH, HEIGHT);
+        LevelHud.getInstance().render(g);
         mGameHandler.render(g);
         g.dispose();
         bufferStrategy.show();

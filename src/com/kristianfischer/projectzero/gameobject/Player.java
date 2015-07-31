@@ -42,6 +42,10 @@ public class Player extends GameObject {
 
     @Override
     public void tick() {
+        if( isDestroyed ) {
+            DynamicGameObjectHandler.getInstance().addDestroyedGameObject(this);
+            return;
+        }
         ComponentHandler.getInstance().update( this );
         performFire();
     }
@@ -63,7 +67,7 @@ public class Player extends GameObject {
 
     private void performFire() {
         if( mFireTimer == mFireDelayTime && mPlayerFired ) {
-            Laser laser = LaserSpawner.SpawnLaser(xPosition + width /2,
+            Laser laser = LaserSpawner.SpawnLaser(xPosition + width / 2,
                     yPosition + height / 2, GameId.PLAYER_PROJECTILE);
             DynamicGameObjectHandler.getInstance().addNewGameObject(laser);
             mFireTimer = 0;

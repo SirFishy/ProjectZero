@@ -24,17 +24,11 @@ public class EnemyProjectileBehavior extends Behavior{
 
     public void update() {
 
-        if( gameObject.isDestroyed() ) {
-            DynamicGameObjectHandler.getInstance().addDestroyedGameObject(gameObject);
-            return;
-        }
-
         boolean reachedLevelBoundary = gameObject.getyPosition() <= 0 ||
                 gameObject.getyPosition() >= (Game.HEIGHT - gameObject.getHeight());
         if(reachedLevelBoundary ) {
             gameObject.setIsDestroyed(true);
             //System.out.println("Destroying Enemy Projectile");
-            DynamicGameObjectHandler.getInstance().addDestroyedGameObject(gameObject);
         }
     }
 }

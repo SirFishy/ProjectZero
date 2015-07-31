@@ -3,6 +3,8 @@ package com.kristianfischer.projectzero.component;
 import com.kristianfischer.projectzero.game.Game;
 import com.kristianfischer.projectzero.gameobject.GameObject;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Created by kristianhfischer on 7/13/15.
  */
@@ -10,8 +12,10 @@ public class MovementGameComponent extends GameComponent {
 
     private MovementDirection verticalState;
     private MovementDirection horizontalState;
-    private int mNumHorizontalButtonsPressed;
-    private int mNumVerticalButtonsPressed;
+    private AtomicBoolean mIsMovingLeft;
+    private AtomicBoolean mIsMovingRight;
+    private AtomicBoolean mIsMovingUp;
+    private AtomicBoolean mIsMovingDown;
     private GameObject mGameObject;
 
     public enum MovementDirection {
@@ -32,8 +36,10 @@ public class MovementGameComponent extends GameComponent {
         mGameObject.setyVelocity(0);
         verticalState = MovementDirection.NONE;
         horizontalState = MovementDirection.NONE;
-        mNumHorizontalButtonsPressed = 0;
-        mNumVerticalButtonsPressed = 0;
+        mIsMovingLeft = new AtomicBoolean(false);
+        mIsMovingRight = new AtomicBoolean(false);
+        mIsMovingUp = new AtomicBoolean(false);
+        mIsMovingDown = new AtomicBoolean(false);
     }
 
     @Override
@@ -52,22 +58,22 @@ public class MovementGameComponent extends GameComponent {
     public void move(MovementDirection direction) {
         switch(direction) {
             case UP:
-                mNumVerticalButtonsPressed ++;
+                mIsMovingUp.compareAndSet(false, true);
                 mGameObject.setyVelocity( -1 * mGameObject.getSpeed() );
                 verticalState = MovementDirection.UP;
                 break;
             case DOWN:
-                mNumVerticalButtonsPressed ++;
+                mIsMovingDown.compareAndSet(false, true);
                 mGameObject.setyVelocity(mGameObject.getSpeed());
                 verticalState = MovementDirection.DOWN;
                 break;
             case LEFT:
-                mNumHorizontalButtonsPressed++;
+                mIsMovingLeft.compareAndSet(false, true);
                 mGameObject.setxVelocity(-1 * mGameObject.getSpeed());
                 horizontalState = MovementDirection.LEFT;
                 break;
             case RIGHT:
-                mNumHorizontalButtonsPressed++;
+                mIsMovingRight.compareAndSet(false, true);
                 mGameObject.setxVelocity(mGameObject.getSpeed());
                 horizontalState = MovementDirection.RIGHT;
                 break;
@@ -80,46 +86,44 @@ public class MovementGameComponent extends GameComponent {
     public void stopMoving(MovementDirection direction) {
         switch(direction) {
             case UP:
-                mNumVerticalButtonsPressed--;
-                if (verticalState == MovementDirection.UP && mNumVerticalButtonsPressed == 0){
+                if ( !mIsMovingDown.get() ){
                     mGameObject.setyVelocity(0);
                     verticalState = MovementDirection.NONE;
-                }else if( mNumVerticalButtonsPressed > 0 ) {
+                }else if( mIsMovingDown.get() ) {
                     mGameObject.setyVelocity( mGameObject.getSpeed());
                     verticalState = MovementDirection.DOWN;
                 }
+                mIsMovingUp.compareAndSet(true, false);
                 break;
             case DOWN:
-                mNumVerticalButtonsPressed --;
-                if (verticalState == MovementDirection.DOWN && mNumVerticalButtonsPressed == 0){
+                if ( !mIsMovingUp.get() ){
                     mGameObject.setyVelocity(0);
                     verticalState = MovementDirection.NONE;
-                }else if( mNumVerticalButtonsPressed > 0 ) {
+                }else if( mIsMovingUp.get() ) {
                     mGameObject.setyVelocity( -1 * mGameObject.getSpeed() );
                     verticalState = MovementDirection.UP;
                 }
-
+                mIsMovingDown.compareAndSet(true, false);
                 break;
             case LEFT:
-                mNumHorizontalButtonsPressed --;
-                if( horizontalState == MovementDirection.LEFT && mNumHorizontalButtonsPressed == 0) {
+                if( !mIsMovingRight.get() ) {
                     mGameObject.setxVelocity(0);
                     horizontalState = MovementDirection.NONE;
-                } else if ( mNumHorizontalButtonsPressed > 0 ) {
+                } else if ( mIsMovingRight.get() ) {
                     mGameObject.setxVelocity( mGameObject.getSpeed() );
                     horizontalState = MovementDirection.RIGHT;
                 }
-
+                mIsMovingLeft.compareAndSet(true, false);
                 break;
             case RIGHT:
-                mNumHorizontalButtonsPressed --;
-                if( horizontalState == MovementDirection.RIGHT && mNumHorizontalButtonsPressed == 0) {
+                if( !mIsMovingLeft.get() ) {
                     mGameObject.setxVelocity(0);
                     horizontalState = MovementDirection.NONE;
-                } else if ( mNumHorizontalButtonsPressed > 0 ) {
+                } else if ( mIsMovingLeft.get() ) {
                     mGameObject.setxVelocity( -1 * mGameObject.getSpeed() );
                     horizontalState = MovementDirection.LEFT;
                 }
+                mIsMovingRight.compareAndSet(true, false);
                 break;
             case NONE:
                 break;

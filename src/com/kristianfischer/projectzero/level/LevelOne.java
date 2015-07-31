@@ -27,7 +27,7 @@ public class LevelOne {
     private static final int GRUNT_SPACING = 20;
     private static final int BUNKER_SPACING = BunkerSpawner.BUNKER_WIDTH * 2;
     private static final int X_OFFSET = (Game.WIDTH - 60) - ( BUNKER_SPACING * NUMBER_OF_BUNKERS )  ;
-    private static final int Y_OFFSET = 10;
+    private static final int Y_OFFSET = 30;
 
     private GameHandler mGameHandler;
 
@@ -46,17 +46,25 @@ public class LevelOne {
         }
 
         for( int row = 0; row < NUMBER_OF_ROWS; row++) {
-            generateEnemyRow(X_OFFSET, Y_OFFSET + 26 * row, ENEMIES_PER_ROW);
+            int score;
+            if( row == 0 )
+                score = GruntSpawner.TOP_ROW_GRUNT_SCORE;
+            else if( row == NUMBER_OF_ROWS - 1 )
+                score = GruntSpawner.BOTTOM_ROW_GRUNT_SCORE;
+            else
+                score = GruntSpawner.MIDDLE_ROW_GRUNT_SCORE;
+            generateEnemyRow(X_OFFSET, Y_OFFSET + 26 * row, ENEMIES_PER_ROW, score);
         }
     }
 
-    private void generateEnemyRow(int startingX, int startingY, int numberOfEnemies) {
+    private void generateEnemyRow(int startingX, int startingY, int numberOfEnemies, int score) {
         for( int enemyCount = 0; enemyCount < numberOfEnemies; enemyCount ++) {
             SpaceGrunt grunt = GruntSpawner.SpawnGrunt(startingX +
                             (GruntSpawner.GRUNT_WIDTH + GRUNT_SPACING) * enemyCount,
-                    startingY);
+                    startingY, score);
             mGameHandler.addGameObject(grunt);
         }
 
     }
+
 }

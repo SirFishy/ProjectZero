@@ -37,9 +37,9 @@ public class SpaceGruntBehavior extends Behavior implements IHiveUnderling{
     }
 
     public void update() {
-
         if( gameObject.isDestroyed() ) {
             hiveHandler.unregisterUnderling(this);
+            return;
         }
 
         boolean passedRightBoundary = gameObject.getxVelocity() > 0 &&

@@ -16,6 +16,8 @@ public class LaserSpawner {
     public static final int LASER_SPEED = 5;
     public static final int LASER_DAMAGE = 1;
 
+    private LaserSpawner() {}
+
     public static Laser SpawnLaser(int xPosition, int yPosition, GameId gameId) {
         Laser laser = new Laser.Builder()
                 .xPosition(xPosition)

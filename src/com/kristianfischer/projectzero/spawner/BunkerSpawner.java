@@ -16,6 +16,8 @@ public class BunkerSpawner {
     public static final int BUNKER_HEIGHT = BUNKER_SECTION_HEIGHT * 2;
     public static final int BUNKER_WIDTH = BUNKER_SECTION_WIDTH * 3;
 
+    private BunkerSpawner() {}
+
     public static Bunker SpawnBunker(int xPosition, int yPosition) {
         Bunker bunker = new Bunker.Builder()
                 .xPosition(xPosition)

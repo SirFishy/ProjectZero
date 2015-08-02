@@ -9,5 +9,6 @@ public enum GameId {
     ENEMY(),
     ENEMY_PROJECTILE(),
     BUNKER(),
+    UFO(),
     NONE()
 }

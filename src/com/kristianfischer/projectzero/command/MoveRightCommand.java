@@ -17,6 +17,10 @@ public class MoveRightCommand extends Command {
         if( object.getGameId().equals(GameId.ENEMY)) {
             object.getMovementComponent().move(MovementGameComponent.MovementDirection.RIGHT);
         }
+
+        if( object.getGameId().equals(GameId.UFO)) {
+            object.getMovementComponent().move(MovementGameComponent.MovementDirection.RIGHT);
+        }
     }
 
     @Override
@@ -26,6 +30,10 @@ public class MoveRightCommand extends Command {
         }
 
         if( object.getGameId().equals(GameId.ENEMY)) {
+            object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.RIGHT);
+        }
+
+        if( object.getGameId().equals(GameId.UFO)) {
             object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.RIGHT);
         }
     }

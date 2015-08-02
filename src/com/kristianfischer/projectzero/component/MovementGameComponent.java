@@ -17,6 +17,7 @@ public class MovementGameComponent extends GameComponent {
     private AtomicBoolean mIsMovingUp;
     private AtomicBoolean mIsMovingDown;
     private GameObject mGameObject;
+    private boolean mClamp;
 
     public enum MovementDirection {
         UP,
@@ -40,18 +41,25 @@ public class MovementGameComponent extends GameComponent {
         mIsMovingRight = new AtomicBoolean(false);
         mIsMovingUp = new AtomicBoolean(false);
         mIsMovingDown = new AtomicBoolean(false);
+        mClamp = true;
     }
 
     @Override
     public void update( ) {
-        mGameObject.setxPosition(
-                Game.clamp(mGameObject.getxPosition() + mGameObject.getxVelocity(),
-                        0,
-                        Game.WIDTH - mGameObject.getWidth()));
-        mGameObject.setyPosition(
-                Game.clamp(mGameObject.getyPosition() + mGameObject.getyVelocity(),
-                        0,
-                        Game.HEIGHT - mGameObject.getHeight() ));
+        if( mClamp) {
+            mGameObject.setxPosition(
+                    Game.clamp(mGameObject.getxPosition() + mGameObject.getxVelocity(),
+                            0,
+                            Game.WIDTH - mGameObject.getWidth()));
+            mGameObject.setyPosition(
+                    Game.clamp(mGameObject.getyPosition() + mGameObject.getyVelocity(),
+                            0,
+                            Game.HEIGHT - mGameObject.getHeight()));
+        } else {
+            mGameObject.setxPosition( mGameObject.getxPosition() + mGameObject.getxVelocity() );
+            mGameObject.setyPosition( mGameObject.getyPosition() + mGameObject.getyVelocity() );
+        }
+
 
     }
 
@@ -137,5 +145,9 @@ public class MovementGameComponent extends GameComponent {
 
     public MovementDirection getHorizontalState() {
         return horizontalState;
+    }
+
+    public void setClamp( boolean isClamped ) {
+        mClamp = isClamped;
     }
 }

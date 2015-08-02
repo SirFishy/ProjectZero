@@ -5,10 +5,7 @@ import com.kristianfischer.projectzero.command.MoveLeftCommand;
 import com.kristianfischer.projectzero.command.MoveRightCommand;
 import com.kristianfischer.projectzero.gameinput.KeyInput;
 import com.kristianfischer.projectzero.gameinput.KeyMapper;
-import com.kristianfischer.projectzero.handler.CollisionHandler;
-import com.kristianfischer.projectzero.handler.DynamicGameObjectHandler;
-import com.kristianfischer.projectzero.handler.GameHandler;
-import com.kristianfischer.projectzero.handler.HiveHandler;
+import com.kristianfischer.projectzero.handler.*;
 import com.kristianfischer.projectzero.level.LevelHud;
 import com.kristianfischer.projectzero.level.LevelOne;
 
@@ -111,6 +108,7 @@ public class Game extends Canvas implements Runnable{
 
     private void tick() {
         mGameHandler.tick();
+        UfoHandler.getInstance().update();
         spawnNewObjects();
         detectCollisions();
         deleteDestroyedObjects();
@@ -138,7 +136,6 @@ public class Game extends Canvas implements Runnable{
             this.createBufferStrategy(2);
             return;
         }
-
         Graphics g = bufferStrategy.getDrawGraphics();
         g.setColor(Color.black);
         g.fillRect(0, 0, WIDTH, ACTUAL_HEIGHT);
@@ -148,7 +145,6 @@ public class Game extends Canvas implements Runnable{
         mGameHandler.render(g);
         g.dispose();
         bufferStrategy.show();
-
     }
 
 

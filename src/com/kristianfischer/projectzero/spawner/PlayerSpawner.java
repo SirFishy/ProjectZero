@@ -17,6 +17,8 @@ public class PlayerSpawner {
     public static final int PLAYER_HEIGHT = 16;
     public static final int PLAYER_SPEED = 5;
 
+    private PlayerSpawner() {}
+
     public static Player SpawnPlayer(int xPosition, int yPosition) {
         Player player = new Player.Builder()
                 .xPosition(xPosition)

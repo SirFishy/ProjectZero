@@ -18,6 +18,8 @@ public class GruntSpawner {
     public static final int MIDDLE_ROW_GRUNT_SCORE = 50;
     public static final int BOTTOM_ROW_GRUNT_SCORE = 20;
 
+    private GruntSpawner() {}
+
     public static SpaceGrunt SpawnGrunt( int xPosition, int yPosition, int score ) {
         SpaceGrunt grunt = new SpaceGrunt.Builder()
                 .xPosition( xPosition )

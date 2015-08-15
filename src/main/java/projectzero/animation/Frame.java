@@ -3,7 +3,8 @@ package main.java.projectzero.animation;
 import java.awt.image.BufferedImage;
 
 /**
- * http://gamedev.stackexchange.com/questions/53705/how-can-i-make-a-sprite-sheet-based-animation-system
+ * Taken from http://gamedev.stackexchange.com/questions/53705/how-can-i-make-a-sprite-sheet-based-animation-system
+ * and adapted for this game
  */
 
 public class Frame {

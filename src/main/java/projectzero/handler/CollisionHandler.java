@@ -96,6 +96,22 @@ public class CollisionHandler {
                     }
                 }
             }
+
+            for( enemies = gameHandler.getEnemyIterator(); enemies.hasNext(); ) {
+                GameObject enemy = enemies.next();
+                if( bunker.getCollisionComponent() == null ) {
+                    //System.out.println("Bunker does not have collision component");
+                    break;
+                }
+                if( enemy.getCollisionComponent() == null ) {
+                    //System.out.println("Projectile does not have collision component");
+                    continue;
+                }
+                if( bunker.getCollisionComponent().getHitbox().detectCollision(enemy) ) {
+                    bunker.setIsActive(false);
+                    bunker.setIsDestroyed(true);
+                }
+            }
         }
 
 

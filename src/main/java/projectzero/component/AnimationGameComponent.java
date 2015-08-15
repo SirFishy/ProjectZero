@@ -9,6 +9,7 @@ import java.util.Map;
 
 /**
  * Created by kristianhfischer on 8/12/15.
+ * A GameComponent that can be added to a GameObject to call all of the required methods for animation
  */
 public class AnimationGameComponent extends GameComponent {
 
@@ -24,28 +25,44 @@ public class AnimationGameComponent extends GameComponent {
 
     @Override
     public void tick() throws IllegalStateException {
+        if( mGameObject == null ) throw new IllegalStateException("GameObject for AnimationGameComponent is null.");
+        if( mCurrentAnimation == null )
+            throw new IllegalStateException("Current Animation for AnimationGameComponent is null");
         mCurrentAnimation.tick();
     }
 
     @Override
     public void render(Graphics g) throws IllegalStateException {
-        if( mCurrentAnimation != null ) {
-            g.drawImage(mCurrentAnimation.getSprite(), mGameObject.getxPosition(), mGameObject.getyPosition(), null);
-        }
+        if( mCurrentAnimation == null )
+            throw new IllegalStateException("Current Animation for AnimationGameComponent is null");
+        g.drawImage(mCurrentAnimation.getSprite(), mGameObject.getxPosition(), mGameObject.getyPosition(), null);
     }
 
+    /**
+     * addAnimation Adds an animation to the AnimationComponent
+     * @param animationName - the String name of the animation so that it can be accessed later
+     * @param animation - the Animation object associated with the name
+     */
     public void addAnimation( String animationName, Animation animation ) {
-        if( mGameObjectAnimations == null ) {
-            System.out.println("Map is null");
-        }
         mGameObjectAnimations.put(animationName, animation);
     }
 
-    public void setAnimation(String animationName) {
-        mCurrentAnimation = mGameObjectAnimations.get( animationName );
-        mCurrentAnimation.start();
+    /**
+     * setAnimation sets the current animation being played for the GameObject
+     * @param animationName - The name of the animation that should be played
+     */
+    public void setAnimation(String animationName) throws IllegalStateException {
+        try {
+            mCurrentAnimation = mGameObjectAnimations.get( animationName );
+            mCurrentAnimation.start();
+        } catch( NullPointerException e) {
+            throw new IllegalStateException("Animation " + animationName + " was never added to AnimationComponent");
+        }
     }
 
+    /**
+     * stopAnimating will stop the GameObject's animations
+     */
     public void stopAnimating() {
         mCurrentAnimation.stop();
         mCurrentAnimation.reset();

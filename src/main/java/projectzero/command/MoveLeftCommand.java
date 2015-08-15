@@ -6,6 +6,8 @@ import main.java.projectzero.component.MovementGameComponent;
 
 /**
  * Created by kristianhfischer on 7/13/15.
+ *
+ * This command will move GameObjects in the (-) x direction
  */
 public class MoveLeftCommand extends Command {
     @Override

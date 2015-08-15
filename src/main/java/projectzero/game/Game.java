@@ -18,29 +18,64 @@ import java.awt.image.BufferStrategy;
  */
 public class Game extends Canvas implements Runnable{
 
+    /**
+     *  Width of the game window
+     */
     public static final int WIDTH = 800;
+
+    /**
+     *  Height of the game window
+     */
     public static final int ACTUAL_HEIGHT = WIDTH /16 * 9;
+
+    /**
+     * Padding adjustment for the game window:
+     * This value is manually adjusted so that objects can't render outside of the
+     * canvas area.
+     */
     public static final int HEIGHT_PADDING = 25;
+
+    /**
+     *  The manually set max height that objects can render in the game window
+     */
     public static final int HEIGHT = ACTUAL_HEIGHT - HEIGHT_PADDING;
+
+    /**
+     * If enemies reach the GAME_OVER_LINE, then the player loses
+     */
+    public static final int GAME_OVER_LINE = HEIGHT - 32;
+
+    /**
+     *  Ticks, or updates, per second
+     */
     public static final double NUMBER_OF_TICKS = 60;
 
+    /**
+     * Drives game thread
+     */
     private boolean mRunning = false;
+
     private Thread mGameThread;
     private GameHandler mGameHandler;
     private KeyMapper mKeyMapper;
-    LevelOne mLevelOne;
+    private LevelOne mLevelOne;
 
     public Game() {
         mGameHandler = GameHandler.getInstance();
+        //Set player key bindings
         mKeyMapper = new KeyMapper();
-        //mKeyMapper.setKeyMapping(KeyEvent.VK_W, new MoveUpCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_A, new MoveLeftCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_D, new MoveRightCommand());
-        //mKeyMapper.setKeyMapping(KeyEvent.VK_S, new MoveDownCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
+
+        //Generate and build level
         mLevelOne = new LevelOne(mGameHandler);
         mLevelOne.build();
+
+        //Register player key input
         this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
+
+        //Create game window
         new GameWindow(WIDTH, ACTUAL_HEIGHT, "Space Invaders Clone!", this);
 
     }
@@ -61,6 +96,9 @@ public class Game extends Canvas implements Runnable{
         }
     }
 
+    /**
+     * This method contains the Game loop.
+     */
     @Override
     public void run() {
         this.requestFocus();
@@ -98,6 +136,16 @@ public class Game extends Canvas implements Runnable{
         new Game();
     }
 
+    /**
+     * clamp is a utility method that will restrict a value from being less than valueMin or greater
+     * than valueMax
+     * @param value - the current value
+     * @param valueMin - the minimum bound for the value
+     * @param valueMax - the maximum bound for the value
+     * @return  valueMin if value < valueMin
+     *          valueMax if value > valueMax
+     *          value if valueMin <= value <= valueMax
+     */
     public static int clamp( int value, int valueMin, int valueMax) {
         if( value < valueMin )
             return valueMin;
@@ -106,6 +154,9 @@ public class Game extends Canvas implements Runnable{
         return value;
     }
 
+    /**
+     * tick updates all of the game's objects in the game loop
+     */
     private void tick() {
         mGameHandler.tick();
         UfoHandler.getInstance().update();
@@ -114,22 +165,40 @@ public class Game extends Canvas implements Runnable{
         deleteDestroyedObjects();
         handleTheHive();
     }
+
+    /**
+     * Helper method to spawn new objects created in the game loop
+     */
     private void spawnNewObjects() {
         while( DynamicGameObjectHandler.getInstance().hasNextNewGameObject() ) {
             mGameHandler.addGameObject( DynamicGameObjectHandler.getInstance().getNextNewGameObject() );
         }
     }
 
+    /**
+     * Helper method to remove objects destroyed in the game loop
+     */
     private void deleteDestroyedObjects() {
         while( DynamicGameObjectHandler.getInstance().hasNextDestroyedGameObject() ) {
             mGameHandler.removeGameObject(DynamicGameObjectHandler.getInstance().getNextDestroyedGameObject());
         }
     }
+
+    /**
+     * Helper method to detect collisions between objects in the game loop
+     */
     private void detectCollisions() { CollisionHandler.getInstance().handleCollisions(mGameHandler);
      }
+
+    /**
+     * Helper method to handle enemy behavior in the game loop
+     */
     private void handleTheHive() { HiveHandler.getInstance().updateHiveCommands();
      }
 
+    /**
+     * render will use a double buffer to render all of the game's objects
+     */
     private void render() {
         BufferStrategy bufferStrategy = this.getBufferStrategy();
         if(bufferStrategy == null) {

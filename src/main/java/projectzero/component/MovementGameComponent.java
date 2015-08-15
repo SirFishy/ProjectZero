@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by kristianhfischer on 7/13/15.
+ * A GameComponent that can be added to a GameObject to call all of the required methods for movement
  */
 public class MovementGameComponent extends GameComponent {
 

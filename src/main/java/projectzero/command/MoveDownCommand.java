@@ -6,6 +6,8 @@ import main.java.projectzero.component.MovementGameComponent;
 
 /**
  * Created by kristianhfischer on 7/13/15.
+ *
+ * MoveDownCommand will move GameObject's in the (-) y direction
  */
 public class MoveDownCommand extends Command {
     @Override

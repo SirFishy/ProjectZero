@@ -6,6 +6,8 @@ import main.java.projectzero.component.MovementGameComponent;
 
 /**
  * Created by kristianhfischer on 7/13/15.
+ *
+ * This command will move GameObjects in the (+) y direction
  */
 public class MoveUpCommand extends Command {
     @Override

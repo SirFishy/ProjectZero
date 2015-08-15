@@ -12,12 +12,20 @@ import java.util.Random;
 
 /**
  * Created by kristianhfischer on 7/31/15.
+ *
+ * This class implements UFO behavior:
+ * - UFO will randomly spawn left or right
+ * - UFO will move in "Left" and "Right" directions a random number of times
+ * - UFO will suddenly change directions a random number of times
+ * - UFO will exit the "Left" or "Right" side of the screen after a certain number of direction changes
  */
 public class UfoBehavior extends Behavior {
 
     private Command mMoveLeft, mMoveRight;
     private Random mRandom;
+    //Number of turns a UFO will perform before it attempts to escape
     private int mNumberOfTurnsRemaining;
+    //Keeps track of whether UFO has intially reached the center of the screen
     private boolean mHasReachedCenter;
 
     public UfoBehavior(GameObject gameObject) {
@@ -25,6 +33,12 @@ public class UfoBehavior extends Behavior {
         mMoveLeft = new MoveLeftCommand();
         mMoveRight = new MoveRightCommand();
         mRandom = new Random();
+
+        /*
+         * If the UFO was spawned right, then move in the left direction to appear on the screen.
+         * else
+         * Move in the right direction to appear on the screen
+         */
         if( this.gameObject.getxPosition() > Game.WIDTH ) {
             mMoveLeft.execute(this.gameObject);
             System.out.println("Ufo Moving left");
@@ -33,6 +47,8 @@ public class UfoBehavior extends Behavior {
             System.out.println("Ufo Moving right");
         }
         mHasReachedCenter = false;
+
+        //Randomly determine how many times the UFO will change direction
         mNumberOfTurnsRemaining = mRandom.nextInt(UfoSpawner.MAX_NUMBER_OF_TURNS -
                 UfoSpawner.MIN_NUMBER_OF_TURNS) + UfoSpawner.MIN_NUMBER_OF_TURNS;
         System.out.println("Number of turns remaining: " + mNumberOfTurnsRemaining);
@@ -41,6 +57,7 @@ public class UfoBehavior extends Behavior {
     @Override
     public void tick() {
         if( gotToTheCenter() ) {
+
             if( mNumberOfTurnsRemaining > 0 ) {
 
                 boolean reachedRightBorder = gameObject.getxVelocity() > 0 &&
@@ -49,7 +66,9 @@ public class UfoBehavior extends Behavior {
                         gameObject.getxPosition() <= 0;
 
                 float chance = mRandom.nextFloat();
-                if( chance <= (1.0f / (60.0f * 10))
+
+                //Switch directions if reached left or right side of screen, or a 1/10 chance per second
+                if( chance <= (1.0f / (60.0f * 10.0f))
                         || reachedRightBorder ||
                         reachedLeftBorder) {
                     switchDirections();
@@ -60,6 +79,9 @@ public class UfoBehavior extends Behavior {
                         0 - gameObject.getWidth();
                 boolean exitedRight = gameObject.getxPosition() >=
                         Game.WIDTH;
+
+                //UFO was not destroyed, so we only set it to not active. This will prevent the player
+                //from getting points for the UFO since the player was unable to destroy it
                 if( exitedLeft || exitedRight ) {
                     gameObject.setIsActive(false);
                 }
@@ -67,6 +89,13 @@ public class UfoBehavior extends Behavior {
         }
     }
 
+    /**
+     * gotToTheCenter is a helper method that will prevent the UFO from changing directions until
+     * the UFO is able to reach the center of the Game Window when the UFO first spawns. This gives the player
+     * a chance to react to the UFO when it appears on the screen. Once the UFO reaches the center of the screen
+     * for the first time, then this method will always return true.
+     * @return true if UFO reached center, false if it did not
+     */
     private boolean gotToTheCenter() {
         if( mHasReachedCenter )
             return true;
@@ -83,6 +112,12 @@ public class UfoBehavior extends Behavior {
         return false;
     }
 
+    /**
+     * switchDirections is a helper method that will switch the direction the UFO is traveling.
+     * If it was moving Left, then switch movement direction to right.
+     * If it was moving Right, then switch movement direction to left.
+     */
+
     private void switchDirections() {
         if( isMovingLeft() ) {
             mMoveLeft.stop(gameObject);
@@ -95,11 +130,20 @@ public class UfoBehavior extends Behavior {
         }
     }
 
+    /**
+     * isMovingLeft determines if UFO is moving left
+     * @return true if UFO is moving left, false if it is not
+     */
+
     private boolean isMovingLeft() {
         return gameObject.getMovementComponent().getHorizontalState()
                 .equals(MovementGameComponent.MovementDirection.LEFT);
     }
 
+    /**
+     * isMovingRight determines if UFO is moving right
+     * @return true if UFO is moving right, false if it is not
+     */
     private boolean isMovingRight() {
         return gameObject.getMovementComponent().getHorizontalState()
                 .equals(MovementGameComponent.MovementDirection.RIGHT);

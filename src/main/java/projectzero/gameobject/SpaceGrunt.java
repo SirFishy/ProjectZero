@@ -2,6 +2,7 @@ package main.java.projectzero.gameobject;
 
 import main.java.projectzero.artificalbehavior.Behavior;
 import main.java.projectzero.artificalbehavior.SpaceGruntBehavior;
+import main.java.projectzero.game.Game;
 import main.java.projectzero.handler.ComponentHandler;
 import main.java.projectzero.handler.DynamicGameObjectHandler;
 import main.java.projectzero.level.LevelHud;
@@ -45,7 +46,11 @@ public class SpaceGrunt extends GameObject {
     @Override
     public void tick() {
         if( isDestroyed ) {
-            LevelHud.getInstance().addScore(mScore);
+            //Only score if enemy hasn't reached game over line
+            if( yPosition < Game.GAME_OVER_LINE ) {
+                LevelHud.getInstance().addScore(mScore);
+            }
+            //Tick the behavior here to allow it to unregister from the HiveHandler
             behavior.tick();
             DynamicGameObjectHandler.getInstance().addDestroyedGameObject(this);
             return;

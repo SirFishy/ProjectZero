@@ -23,13 +23,14 @@ public class GruntSpawner {
     public static final int TOP_ROW_GRUNT_SCORE = 100;
     public static final int MIDDLE_ROW_GRUNT_SCORE = 50;
     public static final int BOTTOM_ROW_GRUNT_SCORE = 20;
+    public static final int ANIMATION_DELAY = 10;
 
     public static final String GRUNT_MOVE_ANIMATION = "Moving Grunt";
-    public static final int ANIMATION_DELAY = 10;
+    public static final String HIGH_GRUNT_SPRITE_FILENAME = "/HighGrunt.png";
 
     private GruntSpawner() {}
 
-    public static SpaceGrunt SpawnGrunt( int xPosition, int yPosition, int score ) {
+    public static SpaceGrunt SpawnGrunt( int xPosition, int yPosition, int score, String gruntSpriteFileName ) {
         SpaceGrunt grunt = new SpaceGrunt.Builder()
                 .xPosition( xPosition )
                 .yPosition( yPosition )
@@ -46,10 +47,9 @@ public class GruntSpawner {
         grunt.getCollisionComponent().setHitbox(new Hitbox.Builder(grunt)
                 .rectangle(0, 0, grunt.getWidth(), grunt.getHeight())
                 .build());
-        String highGruntFile = "/HighGrunt.png";
         BufferedImage[] floating = {
-                Sprite.getSprite(0, 0, highGruntFile),
-                Sprite.getSprite(1, 0, highGruntFile)
+                Sprite.getSprite(0, 0, gruntSpriteFileName),
+                Sprite.getSprite(1, 0, gruntSpriteFileName)
         };
         Animation moveAnimation = new Animation(floating, ANIMATION_DELAY);
         grunt.getAnimationComponent().addAnimation(GRUNT_MOVE_ANIMATION, moveAnimation);

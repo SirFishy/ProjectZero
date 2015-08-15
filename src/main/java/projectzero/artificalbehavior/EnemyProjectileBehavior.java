@@ -8,6 +8,7 @@ import main.java.projectzero.gameobject.GameObject;
 
 /**
  * Created by kristianhfischer on 7/20/15.
+ * Implements behavior of enemy projectiles
  */
 public class EnemyProjectileBehavior extends Behavior{
 

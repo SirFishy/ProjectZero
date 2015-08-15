@@ -2,12 +2,13 @@ package main.java.projectzero.animation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by kristianhfischer on 8/12/15.
+ * Taken from http://gamedev.stackexchange.com/questions/53705/how-can-i-make-a-sprite-sheet-based-animation-system
+ * and adapted for this game
  */
+
 public class Sprite {
 
     private static final int TILE_SIZE = 16;

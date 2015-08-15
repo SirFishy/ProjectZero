@@ -14,7 +14,6 @@ import main.java.projectzero.spawner.PlayerSpawner;
  */
 public class LevelOne {
 
-
     private static final int NUMBER_OF_ROWS = 4;
     private static final int ENEMIES_PER_ROW = 8;
     private static final int NUMBER_OF_BUNKERS = 3;
@@ -47,15 +46,16 @@ public class LevelOne {
                 score = GruntSpawner.BOTTOM_ROW_GRUNT_SCORE;
             else
                 score = GruntSpawner.MIDDLE_ROW_GRUNT_SCORE;
-            generateEnemyRow(X_OFFSET, Y_OFFSET + 26 * row, ENEMIES_PER_ROW, score);
+            generateEnemyRow(X_OFFSET, Y_OFFSET + 26 * row, ENEMIES_PER_ROW, score,
+                    GruntSpawner.HIGH_GRUNT_SPRITE_FILENAME);
         }
     }
 
-    private void generateEnemyRow(int startingX, int startingY, int numberOfEnemies, int score) {
+    private void generateEnemyRow(int startingX, int startingY, int numberOfEnemies, int score, String fileName) {
         for( int enemyCount = 0; enemyCount < numberOfEnemies; enemyCount ++) {
             SpaceGrunt grunt = GruntSpawner.SpawnGrunt(startingX +
                             (GruntSpawner.GRUNT_WIDTH + GRUNT_SPACING) * enemyCount,
-                    startingY, score);
+                    startingY, score, fileName);
             mGameHandler.addGameObject(grunt);
         }
 

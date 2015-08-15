@@ -6,6 +6,8 @@ import main.java.projectzero.gameobject.Player;
 
 /**
  * Created by fischkh1 on 7/16/15.
+ *
+ * This command will fire the GameObject's equipped weapon
  */
 public class FireCommand extends Command {
 

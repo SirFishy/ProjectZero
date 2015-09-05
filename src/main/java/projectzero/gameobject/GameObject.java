@@ -19,7 +19,7 @@ public abstract class GameObject {
     protected int speed;
     protected boolean isActive;
     protected boolean isDestroyed;
-    protected List<GameComponent> componentList;
+    protected List<IGameComponent> componentList;
     protected CollisionGameComponent collisionComponent;
     protected MovementGameComponent movementComponent;
     protected AnimationGameComponent animationComponent;
@@ -35,7 +35,7 @@ public abstract class GameObject {
         private int speed = 0;
         private boolean isActive = false;
         private GameId gameId = GameId.NONE;
-        private List<GameComponent> componentList = new ArrayList<>();
+        private List<IGameComponent> componentList = new ArrayList<>();
         private CollisionGameComponent collisionComponent;
         private MovementGameComponent movementComponent;
         private AnimationGameComponent animationComponent;
@@ -142,7 +142,7 @@ public abstract class GameObject {
         return animationComponent;
     }
 
-    public List<GameComponent> getGameComponents() { return componentList; }
+    public List<IGameComponent> getGameComponents() { return componentList; }
 
     public int getHeight() {
         return height;

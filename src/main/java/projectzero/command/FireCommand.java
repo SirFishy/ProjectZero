@@ -9,7 +9,7 @@ import main.java.projectzero.gameobject.Player;
  *
  * This command will fire the GameObject's equipped weapon
  */
-public class FireCommand extends Command {
+public class FireCommand implements ICommand {
 
     public FireCommand() {
     }

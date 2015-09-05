@@ -7,9 +7,9 @@ import java.awt.*;
 
 /**
  * Created by kristianhfischer on 7/16/15.
- * A GameComponent that can be added to a GameObject to call all of the required methods for collision
+ * A IGameComponent that can be added to a GameObject to call all of the required methods for collision
  */
-public class CollisionGameComponent extends GameComponent {
+public class CollisionGameComponent implements IGameComponent {
 
     private GameObject mGameObject;
     private Hitbox mHitbox;

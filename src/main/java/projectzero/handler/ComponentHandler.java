@@ -1,6 +1,6 @@
 package main.java.projectzero.handler;
 
-import main.java.projectzero.component.GameComponent;
+import main.java.projectzero.component.IGameComponent;
 import main.java.projectzero.gameobject.GameObject;
 
 import java.awt.*;
@@ -18,19 +18,19 @@ public class ComponentHandler {
     }
 
     public void initialize( GameObject object ) {
-        for(GameComponent component : object.getGameComponents() ) {
+        for(IGameComponent component : object.getGameComponents() ) {
             component.initialize( object );
         }
     }
 
     public void tick(GameObject object) {
-        for( GameComponent component : object.getGameComponents() ) {
+        for( IGameComponent component : object.getGameComponents() ) {
             component.tick();
         }
     }
 
     public void render(Graphics g, GameObject object ) {
-        for( GameComponent component : object.getGameComponents() ) {
+        for( IGameComponent component : object.getGameComponents() ) {
             component.render(g);
         }
     }

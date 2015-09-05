@@ -1,6 +1,6 @@
 package main.java.projectzero.artificalbehavior;
 
-import main.java.projectzero.command.Command;
+import main.java.projectzero.command.ICommand;
 import main.java.projectzero.command.MoveUpCommand;
 import main.java.projectzero.game.Game;
 import main.java.projectzero.game.GameId;
@@ -12,7 +12,7 @@ import main.java.projectzero.gameobject.GameObject;
  */
 public class PlayerProjectileBehavior extends Behavior{
 
-    private Command moveUp;
+    private ICommand moveUp;
 
 
     public PlayerProjectileBehavior(GameObject gameObject) throws IllegalStateException {

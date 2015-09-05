@@ -1,6 +1,6 @@
 package main.java.projectzero.artificalbehavior;
 
-import main.java.projectzero.command.Command;
+import main.java.projectzero.command.ICommand;
 import main.java.projectzero.command.MoveLeftCommand;
 import main.java.projectzero.command.MoveRightCommand;
 import main.java.projectzero.component.MovementGameComponent;
@@ -21,7 +21,7 @@ import java.util.Random;
  */
 public class UfoBehavior extends Behavior {
 
-    private Command mMoveLeft, mMoveRight;
+    private ICommand mMoveLeft, mMoveRight;
     private Random mRandom;
     //Number of turns a UFO will perform before it attempts to escape
     private int mNumberOfTurnsRemaining;

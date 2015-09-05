@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by kristianhfischer on 7/13/15.
- * A GameComponent that can be added to a GameObject to call all of the required methods for movement
+ * A IGameComponent that can be added to a GameObject to call all of the required methods for movement
  */
-public class MovementGameComponent extends GameComponent {
+public class MovementGameComponent implements IGameComponent {
 
     private MovementDirection verticalState;
     private MovementDirection horizontalState;

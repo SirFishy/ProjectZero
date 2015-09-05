@@ -3,10 +3,10 @@ package main.java.projectzero.game;
 import main.java.projectzero.command.FireCommand;
 import main.java.projectzero.command.MoveLeftCommand;
 import main.java.projectzero.command.MoveRightCommand;
+import main.java.projectzero.command.PauseCommand;
 import main.java.projectzero.gameinput.KeyInput;
 import main.java.projectzero.gameinput.KeyMapper;
 import main.java.projectzero.handler.*;
-import main.java.projectzero.level.LevelHud;
 import main.java.projectzero.level.LevelOne;
 
 import java.awt.*;
@@ -16,7 +16,7 @@ import java.awt.image.BufferStrategy;
 /**
  * Created by kristianhfischer on 7/6/15.
  */
-public class Game extends Canvas implements Runnable{
+public class Game extends Canvas implements Runnable {
 
     /**
      *  Width of the game window
@@ -50,6 +50,8 @@ public class Game extends Canvas implements Runnable{
      */
     public static final double NUMBER_OF_TICKS = 60;
 
+    public static boolean PAUSE_GAME;
+
     /**
      * Drives game thread
      */
@@ -59,21 +61,35 @@ public class Game extends Canvas implements Runnable{
     private GameHandler mGameHandler;
     private KeyMapper mKeyMapper;
     private LevelOne mLevelOne;
+    private GameState mGameState;
+    private KeyInput mKeyInput;
 
     public Game() {
+        PAUSE_GAME = false;
+
         mGameHandler = GameHandler.getInstance();
         //Set player key bindings
         mKeyMapper = new KeyMapper();
         mKeyMapper.setKeyMapping(KeyEvent.VK_A, new MoveLeftCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_D, new MoveRightCommand());
         mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
+        mKeyMapper.setKeyMapping(KeyEvent.VK_ESCAPE, new PauseCommand());
 
         //Generate and build level
         mLevelOne = new LevelOne(mGameHandler);
         mLevelOne.build();
 
         //Register player key input
-        this.addKeyListener(new KeyInput(mGameHandler, mKeyMapper));
+        mKeyInput = new KeyInput(mGameHandler, mKeyMapper);
+        this.addKeyListener(mKeyInput);
+
+        //Initialize game states
+        GameStateHandler.getInstance().addGameState(GameStateHandler.State.PLAY,
+                new PlayGameState(this));
+        GameStateHandler.getInstance().addGameState(GameStateHandler.State.PAUSE,
+                new PauseGameState(this));
+
+        mGameState = GameStateHandler.getInstance().getGameState(GameStateHandler.State.PLAY);
 
         //Create game window
         new GameWindow(WIDTH, ACTUAL_HEIGHT, "Space Invaders Clone!", this);
@@ -108,7 +124,6 @@ public class Game extends Canvas implements Runnable{
         long timer = System.currentTimeMillis();
         int frames = 0;
         while( mRunning ) {
-
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
@@ -154,47 +169,16 @@ public class Game extends Canvas implements Runnable{
         return value;
     }
 
+    public void setState( GameState state ) {
+        mGameState = state;
+    }
+
     /**
      * tick updates all of the game's objects in the game loop
      */
     private void tick() {
-        mGameHandler.tick();
-        UfoHandler.getInstance().update();
-        spawnNewObjects();
-        detectCollisions();
-        deleteDestroyedObjects();
-        handleTheHive();
+        mGameState.tick();
     }
-
-    /**
-     * Helper method to spawn new objects created in the game loop
-     */
-    private void spawnNewObjects() {
-        while( DynamicGameObjectHandler.getInstance().hasNextNewGameObject() ) {
-            mGameHandler.addGameObject( DynamicGameObjectHandler.getInstance().getNextNewGameObject() );
-        }
-    }
-
-    /**
-     * Helper method to remove objects destroyed in the game loop
-     */
-    private void deleteDestroyedObjects() {
-        while( DynamicGameObjectHandler.getInstance().hasNextDestroyedGameObject() ) {
-            mGameHandler.removeGameObject(DynamicGameObjectHandler.getInstance().getNextDestroyedGameObject());
-        }
-    }
-
-    /**
-     * Helper method to detect collisions between objects in the game loop
-     */
-    private void detectCollisions() { CollisionHandler.getInstance().handleCollisions(mGameHandler);
-     }
-
-    /**
-     * Helper method to handle enemy behavior in the game loop
-     */
-    private void handleTheHive() { HiveHandler.getInstance().updateHiveCommands();
-     }
 
     /**
      * render will use a double buffer to render all of the game's objects
@@ -206,16 +190,8 @@ public class Game extends Canvas implements Runnable{
             return;
         }
         Graphics g = bufferStrategy.getDrawGraphics();
-        g.setColor(Color.black);
-        g.fillRect(0, 0, WIDTH, ACTUAL_HEIGHT);
-        g.setColor(Color.green);
-        g.fillRect(0, HEIGHT - 10, WIDTH, HEIGHT);
-        LevelHud.getInstance().render(g);
-        mGameHandler.render(g);
+        mGameState.render(g);
         g.dispose();
         bufferStrategy.show();
     }
-
-
-
 }

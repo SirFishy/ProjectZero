@@ -9,19 +9,22 @@ import main.java.projectzero.component.MovementGameComponent;
  *
  * This command will move GameObjects in the (+) y direction
  */
-public class MoveUpCommand extends Command {
+public class MoveUpCommand implements ICommand {
     @Override
     public void execute(GameObject object) {
         if(object.getGameId().equals(GameId.PLAYER)) {
             object.getMovementComponent().move(MovementGameComponent.MovementDirection.UP);
+            return;
         }
 
         if( object.getGameId().equals(GameId.ENEMY)) {
             object.getMovementComponent().move(MovementGameComponent.MovementDirection.UP);
+            return;
         }
 
         if( object.getGameId().equals(GameId.PLAYER_PROJECTILE)) {
             object.getMovementComponent().move(MovementGameComponent.MovementDirection.UP);
+            return;
         }
     }
 
@@ -29,14 +32,17 @@ public class MoveUpCommand extends Command {
     public void stop(GameObject object) {
         if(object.getGameId().equals(GameId.PLAYER)) {
             object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.UP);
+            return;
         }
 
         if( object.getGameId().equals(GameId.ENEMY)) {
             object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.UP);
+            return;
         }
 
         if( object.getGameId().equals(GameId.PLAYER_PROJECTILE)) {
             object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.UP);
+            return;
         }
     }
 }

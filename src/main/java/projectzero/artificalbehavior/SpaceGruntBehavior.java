@@ -23,7 +23,7 @@ public class SpaceGruntBehavior extends Behavior implements IHiveUnderling{
 
     //Memory for previous SpaceGrunt movement direction
     private MovementGameComponent.MovementDirection mPreviousHorizontalDirection;
-    private Command moveLeft, moveRight, moveDown;
+    private ICommand moveLeft, moveRight, moveDown;
     //Keeps track of whether SpaceGrunt has reached left or right side of screen
     private boolean mHasReachedHorizontalBoundary;
     //Handler controlling the hive behavior of this SpaceGrunt

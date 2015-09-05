@@ -1,6 +1,5 @@
 package main.java.projectzero.gameobject;
 
-import main.java.projectzero.component.GameComponent;
 import main.java.projectzero.handler.ComponentHandler;
 import main.java.projectzero.handler.DynamicGameObjectHandler;
 import main.java.projectzero.handler.GameHandler;

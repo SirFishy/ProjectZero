@@ -9,19 +9,22 @@ import main.java.projectzero.component.MovementGameComponent;
  *
  * This command will move GameObjects in the (-) x direction
  */
-public class MoveLeftCommand extends Command {
+public class MoveLeftCommand implements ICommand {
     @Override
     public void execute(GameObject object) {
         if(object.getGameId().equals(GameId.PLAYER)) {
             object.getMovementComponent().move(MovementGameComponent.MovementDirection.LEFT);
+            return;
         }
 
         if( object.getGameId().equals(GameId.ENEMY)) {
             object.getMovementComponent().move(MovementGameComponent.MovementDirection.LEFT);
+            return;
         }
 
         if( object.getGameId().equals(GameId.UFO)) {
             object.getMovementComponent().move(MovementGameComponent.MovementDirection.LEFT);
+            return;
         }
     }
 
@@ -29,14 +32,17 @@ public class MoveLeftCommand extends Command {
     public void stop(GameObject object) {
         if(object.getGameId().equals(GameId.PLAYER)) {
            object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.LEFT);
+            return;
         }
 
         if( object.getGameId().equals(GameId.ENEMY)) {
             object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.LEFT);
+            return;
         }
 
         if( object.getGameId().equals(GameId.UFO)) {
             object.getMovementComponent().stopMoving(MovementGameComponent.MovementDirection.LEFT);
+            return;
         }
     }
 }

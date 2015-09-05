@@ -1,8 +1,7 @@
 package main.java.projectzero.gameinput;
 
-import main.java.projectzero.command.Command;
+import main.java.projectzero.command.ICommand;
 import main.java.projectzero.handler.GameHandler;
-import main.java.projectzero.game.GameId;
 import main.java.projectzero.gameobject.GameObject;
 
 import java.awt.event.KeyAdapter;
@@ -26,13 +25,11 @@ public class KeyInput extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         //super.keyPressed(e);
         int key = e.getKeyCode();
-        Iterator<GameObject> iterator = mGameHandler.getGameObjectIterator();
+        Iterator<GameObject> iterator = mGameHandler.getPlayerIterator();
         while( iterator.hasNext() ) {
             GameObject object = iterator.next();
-            if( object.getGameId() == GameId.PLAYER) {
-                //System.out.println("Key pressed: " + e.getKeyChar());
-                handlePlayerKeyPressed(key, object);
-            }
+            //System.out.println("Key pressed: " + e.getKeyChar());
+            handlePlayerKeyPressed(key, object);
         }
     }
 
@@ -40,24 +37,22 @@ public class KeyInput extends KeyAdapter {
     public void keyReleased(KeyEvent e) {
         //super.keyReleased(e);
         int key = e.getKeyCode();
-        Iterator<GameObject> iterator = mGameHandler.getGameObjectIterator();
+        Iterator<GameObject> iterator = mGameHandler.getPlayerIterator();
         while( iterator.hasNext() ) {
             GameObject object = iterator.next();
-            if( object.getGameId() == GameId.PLAYER) {
-                //System.out.println("Key released: " + e.getKeyChar());
-                handlePlayerKeyReleased(key, object);
-            }
+            //System.out.println("Key released: " + e.getKeyChar());
+            handlePlayerKeyReleased(key, object);
         }
     }
 
     private void handlePlayerKeyPressed(int key, GameObject object) {
-        Command command = mKeyMapper.getCommand(key);
+        ICommand command = mKeyMapper.getCommand(key);
         if( command != null) command.execute(object);
     }
 
     private void handlePlayerKeyReleased(int key, GameObject object) {
 
-        Command command = mKeyMapper.getCommand(key);
+        ICommand command = mKeyMapper.getCommand(key);
         if( command != null) command.stop(object);
 
     }

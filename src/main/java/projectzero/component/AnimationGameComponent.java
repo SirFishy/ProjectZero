@@ -9,9 +9,9 @@ import java.util.Map;
 
 /**
  * Created by kristianhfischer on 8/12/15.
- * A GameComponent that can be added to a GameObject to call all of the required methods for animation
+ * A IGameComponent that can be added to a GameObject to call all of the required methods for animation
  */
-public class AnimationGameComponent extends GameComponent {
+public class AnimationGameComponent implements IGameComponent {
 
     private Map<String, Animation> mGameObjectAnimations;
     private Animation mCurrentAnimation;

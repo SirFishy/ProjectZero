@@ -14,12 +14,16 @@ public class GameButton {
 
     private int xTextOffset;
     private int yTextOffset;
+    private int xVelocity;
+    private int yVelocity;
 
     public GameButton(int x, int y, int width, int height) {
         mButtonState = State.NONE;
         mButtonFrame = new Rectangle(x, y, width, height);
         xTextOffset = 0;
         yTextOffset = 0;
+        xVelocity = 0;
+        yVelocity = 0;
     }
 
     private enum State {
@@ -49,19 +53,19 @@ public class GameButton {
                 drawButtonRectangle(g, Color.WHITE);
                 fillButtonRectangle(g, Color.WHITE);
                 drawButtonText(g, Color.BLACK);
-                if( mButtonListener != null ) mButtonListener.onButtonHovered();
+
                 break;
             case PRESSED:
                 drawButtonRectangle(g, Color.WHITE);
                 fillButtonRectangle(g, Color.WHITE);
                 drawButtonText(g, Color.GREEN);
-                if( mButtonListener != null ) mButtonListener.onButtonPressed();
+
                 break;
             case RELEASED:
                 drawButtonRectangle(g, Color.BLACK);
                 fillButtonRectangle(g, Color.WHITE);
                 drawButtonText(g, Color.RED);
-                if( mButtonListener != null ) mButtonListener.onButtonReleased();
+
                 break;
             default:
                 break;
@@ -78,22 +82,31 @@ public class GameButton {
         mButtonText = text;
     }
 
-    public void hover( Point point ) {
+    public void tick( Point point ) {
 
         if( point == null )
             return;
 
         if( mButtonFrame.contains( point ) && mButtonState.equals( State.NONE) ) {
             mButtonState = State.HOVER;
+            if( mButtonListener != null ) mButtonListener.onButtonHovered();
         } else if( !mButtonFrame.contains(point) ) {
             mButtonState = State.NONE;
         }
+
+        //System.out.println("Made it to here: " + xVelocity);
+
+        mButtonFrame.setLocation(
+                (int) mButtonFrame.getX() + xVelocity,
+                (int) mButtonFrame.getY() + yVelocity);
+
 
     }
 
     public void press( Point point ) {
         if( mButtonFrame.contains( point ) ) {
             mButtonState = State.PRESSED;
+            if( mButtonListener != null ) mButtonListener.onButtonPressed();
         }
 
     }
@@ -102,6 +115,7 @@ public class GameButton {
         if( mButtonFrame.contains( point ) &&
                 mButtonState.equals(State.PRESSED) ) {
             mButtonState = State.RELEASED;
+            if( mButtonListener != null ) mButtonListener.onButtonReleased();
         }
     }
 
@@ -115,6 +129,22 @@ public class GameButton {
 
     public void setyTextOffset(int yTextOffset) {
         this.yTextOffset = yTextOffset;
+    }
+
+    public void setxVelocity( int xVelocity ) {
+        this.xVelocity = xVelocity;
+    }
+
+    public void setyVelocity( int yVelocity ) {
+        this.yVelocity = yVelocity;
+    }
+
+    public int getxPosition() {
+        return (int) mButtonFrame.getX();
+    }
+
+    public int getyPosition() {
+        return (int) mButtonFrame.getY();
     }
 
     private void drawButtonText( Graphics g, Color color ) {

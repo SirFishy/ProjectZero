@@ -58,30 +58,11 @@ public class Game extends Canvas implements Runnable {
     private boolean mRunning = false;
 
     private Thread mGameThread;
-    private GameHandler mGameHandler;
-    private KeyMapper mKeyMapper;
-    private LevelOne mLevelOne;
     private GameState mGameState;
-    private KeyInput mKeyInput;
+
 
     public Game() {
         PAUSE_GAME = false;
-
-        mGameHandler = GameHandler.getInstance();
-        //Set player key bindings
-        mKeyMapper = new KeyMapper();
-        mKeyMapper.setKeyMapping(KeyEvent.VK_A, new MoveLeftCommand());
-        mKeyMapper.setKeyMapping(KeyEvent.VK_D, new MoveRightCommand());
-        mKeyMapper.setKeyMapping(KeyEvent.VK_SPACE, new FireCommand());
-        mKeyMapper.setKeyMapping(KeyEvent.VK_ESCAPE, new PauseCommand());
-
-        //Generate and build level
-        mLevelOne = new LevelOne(mGameHandler);
-        mLevelOne.build();
-
-        //Register player key input
-        mKeyInput = new KeyInput(mGameHandler, mKeyMapper);
-        this.addKeyListener(mKeyInput);
 
         //Initialize game states
         GameStateHandler.getInstance().addGameState(GameStateHandler.State.PLAY,

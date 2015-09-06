@@ -16,14 +16,13 @@ public class PauseCommand implements ICommand {
 
     @Override
     public void execute(GameObject object) {
+
         if( Game.PAUSE_GAME && !mPausedPressed ) {
             Game.PAUSE_GAME = false;
             mPausedPressed = true;
-            System.out.println("Pause: " + Game.PAUSE_GAME);
         } else if ( !Game.PAUSE_GAME && !mPausedPressed ) {
             Game.PAUSE_GAME = true;
             mPausedPressed = true;
-            System.out.println("Pause: " + Game.PAUSE_GAME);
         }
 
     }

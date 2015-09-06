@@ -16,8 +16,8 @@ public class KeyInput extends KeyAdapter {
     private GameHandler mGameHandler;
     private KeyMapper mKeyMapper;
 
-    public KeyInput(GameHandler handler, KeyMapper mapper) {
-        mGameHandler = handler;
+    public KeyInput( KeyMapper mapper) {
+        mGameHandler = GameHandler.getInstance();
         mKeyMapper = mapper;
     }
 

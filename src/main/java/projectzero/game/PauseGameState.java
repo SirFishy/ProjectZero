@@ -1,15 +1,11 @@
 package main.java.projectzero.game;
 
-import main.java.projectzero.command.PauseCommand;
-import main.java.projectzero.gameinput.KeyInput;
-import main.java.projectzero.gameinput.KeyMapper;
 import main.java.projectzero.gameinput.MenuMouseListener;
 import main.java.projectzero.handler.GameStateHandler;
 import main.java.projectzero.menu.*;
 import main.java.projectzero.menu.Menu;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 /**
  * Created by kristianhfischer on 9/4/15.
@@ -17,8 +13,6 @@ import java.awt.event.KeyEvent;
 public class PauseGameState extends GameState {
 
     private boolean mStateSwitched;
-    private KeyMapper mKeyMapper;
-    private KeyInput mKeyInput;
     private MenuMouseListener mMouseListener;
     private Menu mPauseMenu;
 
@@ -59,23 +53,23 @@ public class PauseGameState extends GameState {
     private void initializeListeners() {
 
         //Set keys up for menu
-        mKeyMapper = new KeyMapper();
-        mKeyMapper.setKeyMapping(KeyEvent.VK_ESCAPE, new PauseCommand());
+        //mKeyMapper = new KeyMapper();
+        //mKeyMapper.setKeyMapping(KeyEvent.VK_ESCAPE, new PauseCommand());
 
         //Create player key input
-        mKeyInput = new KeyInput(mKeyMapper);
+        //mKeyInput = new KeyInput(mKeyMapper);
         mMouseListener = new MenuMouseListener(mPauseMenu);
 
 
     }
 
     private void registerListeners() {
-        mGame.addKeyListener(mKeyInput);
+        //mGame.addKeyListener(mKeyInput);
         mGame.addMouseListener(mMouseListener);
     }
 
     private void unregisterListeners() {
-        mGame.removeKeyListener(mKeyInput);
+       // mGame.removeKeyListener(mKeyInput);
         mGame.removeMouseListener(mMouseListener);
     }
 }

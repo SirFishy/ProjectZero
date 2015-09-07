@@ -67,4 +67,11 @@ public class HiveHandler {
         return mNumberOfEnemies;
     }
 
+    public void clear() {
+        underlingList.clear();
+        mNumberOfEnemies = 0;
+        mPrepareDescent = false;
+        mRandom = new Random();
+    }
+
 }

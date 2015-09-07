@@ -1,16 +1,8 @@
 package main.java.projectzero.game;
-
-import main.java.projectzero.command.FireCommand;
-import main.java.projectzero.command.MoveLeftCommand;
-import main.java.projectzero.command.MoveRightCommand;
-import main.java.projectzero.command.PauseCommand;
-import main.java.projectzero.gameinput.KeyInput;
-import main.java.projectzero.gameinput.KeyMapper;
 import main.java.projectzero.handler.*;
-import main.java.projectzero.level.LevelOne;
+
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 
 /**

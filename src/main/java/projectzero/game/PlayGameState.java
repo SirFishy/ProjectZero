@@ -57,6 +57,16 @@ public class PlayGameState extends GameState {
         mGameHandler.render(g);
     }
 
+    public void restartLevel() {
+        mGameHandler.clear();
+        DynamicGameObjectHandler.getInstance().clear();
+        HiveHandler.getInstance().clear();
+        UfoHandler.getInstance().clear();
+        LevelHud.getInstance().clear();
+        mLevelOne = new LevelOne(mGameHandler);
+        mLevelOne.build();
+    }
+
     /**
      * Helper method to spawn new objects created in the game loop
      */

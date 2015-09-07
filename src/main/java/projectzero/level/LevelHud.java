@@ -22,7 +22,7 @@ public class LevelHud {
         mScore = 0;
     }
 
-    public void update() {
+    public void tick() {
 
     }
 
@@ -39,7 +39,7 @@ public class LevelHud {
         mScore += score;
     }
 
-    public void resetHud() {
+    public void clear() {
         mScore = 0;
         mNumberOfLives = 3;
     }

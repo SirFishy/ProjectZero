@@ -96,6 +96,16 @@ public class GameHandler  {
         }
     }
 
+    public void clear() {
+        mNumberOfEnemyProjectiles = 0;
+        mNumberOfPlayerProjectiles = 0;
+        gameObjects.clear();
+        players.clear();
+        enemies.clear();
+        projectiles.clear();
+        bunkers.clear();
+    }
+
     public Iterator<GameObject> getGameObjectIterator() {
         return gameObjects.iterator();
     }

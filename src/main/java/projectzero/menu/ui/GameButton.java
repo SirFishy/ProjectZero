@@ -16,6 +16,7 @@ public class GameButton {
     private int yTextOffset;
     private int xVelocity;
     private int yVelocity;
+    private boolean isActive;
 
     public GameButton(int x, int y, int width, int height) {
         mButtonState = State.NONE;
@@ -24,6 +25,7 @@ public class GameButton {
         yTextOffset = 0;
         xVelocity = 0;
         yVelocity = 0;
+        isActive = false;
     }
 
     private enum State {
@@ -138,6 +140,31 @@ public class GameButton {
     public void setyVelocity( int yVelocity ) {
         this.yVelocity = yVelocity;
     }
+
+    public int getxVelocity() {
+        return xVelocity;
+    }
+
+    public int getyVelocity() {
+        return yVelocity;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public void setxPosition( int xPosition ) {
+        mButtonFrame.setLocation(xPosition, (int) mButtonFrame.getY());
+    }
+
+    public void setyPosition( int yPosition ) {
+        mButtonFrame.setLocation( (int) mButtonFrame.getX(), yPosition);
+    }
+
 
     public int getxPosition() {
         return (int) mButtonFrame.getX();

@@ -62,4 +62,9 @@ public class UfoHandler {
         }
     }
 
+    public void clear() {
+        mSpawnTimer = 0;
+        mUfo = null;
+    }
+
 }

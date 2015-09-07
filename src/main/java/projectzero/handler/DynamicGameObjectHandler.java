@@ -37,4 +37,9 @@ public class DynamicGameObjectHandler {
         if( mDestroyedGameObjects.isEmpty() ) throw new IllegalStateException("No GameObjects available. ");
         return mDestroyedGameObjects.poll();
     }
+
+    public void clear() {
+        mNewGameObjects.clear();
+        mDestroyedGameObjects.clear();
+    }
 }
